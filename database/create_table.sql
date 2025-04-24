@@ -14,10 +14,10 @@ USE SHOPEE;
 
 CREATE TABLE Person (
 	username 			VARCHAR(20) NOT NULL PRIMARY KEY,
-    hashed_password     VARCHAR(20) NOT NULL,
+    hashed_password     VARCHAR(100) NOT NULL,
     email				VARCHAR(20),
-    birth_day			VARCHAR(20),
-    phone_number		INT,
+    birth_day			DATE,
+    phone_number		VARCHAR(11),
     is_banned           BOOL NOT NULL,
     avatar_link         TEXT,
     gender				ENUM('m', 'f') # male, female, LGBT ?, lesbian ??
@@ -60,7 +60,7 @@ CREATE TABLE Buyer (
 
 CREATE TABLE Seller (
 	shop_name			VARCHAR(20) NOT NULL,
-	business_id 	    INT,
+	business_id 	    INT NOT NULL UNIQUE,
     username            VARCHAR(20) PRIMARY KEY
 );
 

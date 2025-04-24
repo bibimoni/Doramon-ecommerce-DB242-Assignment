@@ -1,0 +1,18 @@
+USE shopee;
+DROP FUNCTION IF EXISTS Func_Valid_name;
+
+DELIMITER //
+CREATE FUNCTION Func_Valid_name(s VARCHAR(255))
+    RETURNS BOOLEAN
+    DETERMINISTIC
+BEGIN
+    IF CHAR_LENGTH(s) <= 3 THEN
+    RETURN FALSE;
+  END IF;
+    IF NOT (s RLIKE '^[A-Za-z0-9]+(?:[ &#\\.\\-][A-Za-z0-9]+)*$') THEN
+        RETURN FALSE;
+    END IF;
+
+    RETURN TRUE;
+END //
+DELIMITER ;
