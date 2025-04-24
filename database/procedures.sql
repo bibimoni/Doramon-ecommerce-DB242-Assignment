@@ -213,7 +213,9 @@ BEGIN
 END //
 DELIMITER ;
 
-# gia chua tru di voucher va chiet khau
+# Liet ke ra nhung don hang co chua sp
+# thuoc 1 nganh hang va gia cua chung
+# nhung chua tru di voucher va chiet khau
 DELIMITER //
 CREATE PROCEDURE Proc_SalesByCategory(
     IN in_category VARCHAR(20),
@@ -221,23 +223,50 @@ CREATE PROCEDURE Proc_SalesByCategory(
     IN in_bid INT
 )
 BEGIN
-    SELECT
-        ohv.order_id AS order_id,
-        per.username AS buyer,
-        p.name AS `product name`,
-        (ohv.amount * v.price) AS total
-    FROM
-        Order_has_variations AS ohv
-        JOIN Variation AS v ON ohv.variation_id = v.variation_id
-        JOIN Product AS p ON p.category = ohv.product_id
-        JOIN `Order` as o ON ohv.order_id = o.order_id
-        JOIN Person as per ON o.buyer_usr = per.username
-    WHERE
-        p.product_id = in_category
-        AND p.business_id = in_bid
-        AND YEAR(placed_date) = in_year
-        AND o.state_type = 'finished'
-    ORDER BY
-        ohv.order_id;
+    SELECT ohv.order_id         AS order_id,
+           per.username         AS buyer,
+           p.name               AS product_name,
+           ohv.amount * v.price AS total
+    FROM Order_has_variations AS ohv
+             JOIN Variation AS v ON ohv.variation_id = v.variation_id
+             JOIN Product AS p ON p.category = ohv.product_id
+             JOIN `Order` as o ON ohv.order_id = o.order_id
+             JOIN Person as per ON o.buyer_usr = per.username
+    WHERE p.product_id = in_category
+      AND p.business_id = in_bid
+      AND YEAR(placed_date) = in_year
+      AND o.state_type = 'finished'
+    ORDER BY ohv.order_id;
+END //
+DELIMITER ;
+
+# tim san pham co doanh so cao nhat
+# cua 1 shop tu 1 khoang thoi gian nao do
+DELIMITER  //
+CREATE PROCEDURE Proc_BestSaleFromDate(
+    IN in_from DATETIME,
+    IN in_bid INT
+)
+BEGIN
+    SELECT p.product_id AS product_id,
+           p.name       AS product_name
+    FROM `Order` AS o
+             JOIN Order_has_variations AS ohv ON o.order_id = ohv.order_id
+             JOIN Product AS p ON p.product_id = ohv.product_id
+             JOIN Variation AS v ON v.variation_id = ohv.variation_id
+    WHERE p.product_id = in_bid
+      AND o.placed_date >= in_from
+      AND o.state_type = 'finished'
+    HAVING SUM(ohv.amount) = (SELECT MAX(sales)
+                              FROM (SELECT SUM(ohv.amount) as sales
+                                    FROM `Order` AS o
+                                             JOIN Order_has_variations AS ohv ON o.order_id = ohv.order_id
+                                             JOIN Product AS p ON p.product_id = ohv.product_id
+                                             JOIN Variation AS v ON v.variation_id = ohv.variation_id
+                                    WHERE p.product_id = in_bid
+                                      AND o.placed_date >= in_from
+                                      AND o.state_type = 'finished') as sub);
+
+
 END //
 DELIMITER ;
