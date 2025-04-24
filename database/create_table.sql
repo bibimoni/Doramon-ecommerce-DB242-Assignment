@@ -1,4 +1,34 @@
 USE SHOPEE;
+
+DROP TABLE IF EXISTS Order_has_variations;
+DROP TABLE IF EXISTS Apply_voucher;
+DROP TABLE IF EXISTS Cart_has_variations;
+DROP TABLE IF EXISTS Ban_seller;
+DROP TABLE IF EXISTS Ban_buyer;
+DROP TABLE IF EXISTS Report;
+DROP TABLE IF EXISTS Use_voucher;
+DROP TABLE IF EXISTS Voucher_category;
+DROP TABLE IF EXISTS Create_voucher;
+DROP TABLE IF EXISTS Cart;
+DROP TABLE IF EXISTS Transaction;
+DROP TABLE IF EXISTS `Order`;
+DROP TABLE IF EXISTS Delivery;
+DROP TABLE IF EXISTS Info_variation;
+DROP TABLE IF EXISTS Variation;
+DROP TABLE IF EXISTS Product_attachments;
+DROP TABLE IF EXISTS Comment;
+DROP TABLE IF EXISTS Product;
+DROP TABLE IF EXISTS Voucher;
+DROP TABLE IF EXISTS Buyer;
+DROP TABLE IF EXISTS Seller;
+DROP TABLE IF EXISTS Admin;
+DROP TABLE IF EXISTS Sending_message;
+DROP TABLE IF EXISTS Shop;
+DROP TABLE IF EXISTS Social;
+DROP TABLE IF EXISTS Banking_account;
+DROP TABLE IF EXISTS Address;
+DROP TABLE IF EXISTS Person;
+
 # Tham chieu den khoa ngoai thi truong khoa ngoai trong bang do
 # se khong co rang buoc NOT NULL (quy uoc vay thoi chu khong
 # biet co nen lam vay khong :>>>)

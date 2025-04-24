@@ -1,8 +1,12 @@
 USE shopee;
-DROP PROCEDURE IF EXISTS Insert_person;
-DROP PROCEDURE IF EXISTS Insert_buyer;
-DROP PROCEDURE IF EXISTS Insert_seller;
-DROP PROCEDURE IF EXISTS Insert_admin;
+DROP PROCEDURE IF EXISTS Proc_Insert_person;
+DROP PROCEDURE IF EXISTS Proc_Insert_buyer;
+DROP PROCEDURE IF EXISTS Proc_Insert_seller;
+DROP PROCEDURE IF EXISTS Proc_Insert_admin;
+DROP PROCEDURE IF EXISTS Proc_Insert_product;
+DROP PROCEDURE IF EXISTS Proc_Sales_by_category;
+DROP PROCEDURE IF EXISTS Proc_Best_sale_from_date;
+DROP PROCEDURE IF EXISTS Proc_Unreviewed_product;
 
 DELIMITER //
 CREATE PROCEDURE Proc_Insert_person(
@@ -217,7 +221,7 @@ DELIMITER ;
 # thuoc 1 nganh hang va gia cua chung
 # nhung chua tru di voucher va chiet khau
 DELIMITER //
-CREATE PROCEDURE Proc_SalesByCategory(
+CREATE PROCEDURE Proc_Sales_by_category(
     IN in_category VARCHAR(20),
     IN in_year INT,
     IN in_bid INT
@@ -243,7 +247,7 @@ DELIMITER ;
 # tim san pham co doanh so cao nhat
 # cua 1 shop tu 1 khoang thoi gian nao do
 DELIMITER  //
-CREATE PROCEDURE Proc_BestSaleFromDate(
+CREATE PROCEDURE Proc_Best_sale_from_date(
     IN in_from DATETIME,
     IN in_bid INT
 )
