@@ -102,7 +102,9 @@ BEGIN
             avatar_link,
             gender
          );
-
+    IF in_coin IS NULL THEN
+        SET in_coin = 0;
+    END IF;
     INSERT INTO Buyer (coin, username)
     VALUES (in_coin, in_username);
 END //
@@ -119,15 +121,13 @@ CREATE PROCEDURE Proc_Insert_seller(
     IN avatar_link TEXT,
     IN gender ENUM ('m', 'f'),
     IN in_shop_name VARCHAR(20),
-    IN in_bid INT,
-    IN in_address VARCHAR(20),
-    IN in_join_time DATETIME,
+    IN in_addr VARCHAR(20),
     IN in_btype ENUM ('personal', 'business', 'family'),
     IN in_baddr VARCHAR(20),
     IN in_tax INT
 )
 BEGIN
-    IF Func_Valid_name(in_shop_name) THEN
+    IF NOT Func_Valid_name(in_shop_name) THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Shop name\'s is invalid';
     END IF;
@@ -143,11 +143,21 @@ BEGIN
             gender
          );
 
-    INSERT INTO Shop (business_id, name, address, join_time, business_type, business_address, tax_number)
-    VALUES (in_bid, in_shop_name, in_address, in_join_time, in_btype, in_baddr, in_tax);
+    INSERT INTO Shop (name, address, business_type, business_address, tax_number)
+    VALUES (in_shop_name,
+            in_addr,
+            in_btype,
+            in_baddr,
+            in_tax);
 
-    INSERT INTO Seller (Seller.shop_name, Seller.business_id, Seller.username)
-    VALUES (in_shop_name, in_bid, in_username);
+    INSERT INTO Seller (
+#                         Seller.shop_name,
+                        Seller.business_id,
+                        Seller.username)
+    VALUES (
+#             in_shop_name,
+            LAST_INSERT_ID()
+               , in_username);
 END //
 DELIMITER ;
 
@@ -183,7 +193,6 @@ DELIMITER ;
 DELIMITER //
 # insert product must have atleast 1 variation
 CREATE PROCEDURE Proc_Insert_product(
-    IN in_pid INT,
     IN in_name VARCHAR(20),
     IN in_thumbnail TEXT,
     IN in_info TEXT,
@@ -192,14 +201,13 @@ CREATE PROCEDURE Proc_Insert_product(
     IN in_admin VARCHAR(20)
 )
 BEGIN
-    IF Func_Valid_name(in_name) THEN
+    IF NOT Func_Valid_name(in_name) THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Invalid product name';
     END IF;
 
-    INSERT INTO Product(product_id, name, thumbnail, info, category, business_id, admin_usr)
-    VALUES (in_pid,
-            in_name,
+    INSERT INTO Product(name, thumbnail, info, category, business_id, admin_usr)
+    VALUES (in_name,
             in_thumbnail,
             in_info,
             in_category,

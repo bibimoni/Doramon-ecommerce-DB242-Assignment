@@ -9,7 +9,35 @@ CALL Proc_Insert_buyer(
      false,
      null,
      null,
-     0
+     null
      );
 
 SELECT * FROM Person;
+
+SELECT *
+    FROM
+      Person p
+    JOIN Buyer b ON p.username = b.username
+    WHERE
+      p.username = 'distiled';
+
+CALL Proc_Insert_Seller(
+    'dangnguyenbaovn',
+    'qwertyuioasdfghjkl', 'bao@company.com', null, null, false, null, null,
+    'shopoffaith', 'Ho Chi Minh', 'personal', 'Nha Trang', 0012839712
+  );
+
+SELECT *
+    FROM
+      Person p
+    JOIN Seller s ON s.username = p.username
+    JOIN Shop sh ON sh.business_id = s.business_id
+    WHERE p.username = 'dangnguyenbaovn'
+
+SELECT *
+    FROM
+      Person p
+    JOIN Seller s ON s.username = p.username
+    JOIN Shop sh ON sh.business_id = s.business_id
+    ORDER BY
+      p.username

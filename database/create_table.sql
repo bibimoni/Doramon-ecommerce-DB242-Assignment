@@ -61,15 +61,15 @@ CREATE TABLE Address (
 
 CREATE TABLE Banking_account (
 	bank_name			VARCHAR(20) NOT NULL,
-    bank_number 		INT UNIQUE NOT NULL, # 1 tai khoan 1 bank thoi
-    bank_type			VARCHAR(20),
+    bank_number 		VARCHAR(20) UNIQUE NOT NULL, # 1 tai khoan 1 bank thoi
+    bank_type			ENUM('credit', 'debit') DEFAULT 'debit',
     username            VARCHAR(20),
     PRIMARY KEY (username, bank_number) # !!!! khac voi trong mapping
 );
 
 CREATE TABLE Social (
 	link				VARCHAR(20) UNIQUE NOT NULL, # cac tk dung cac account khac nhau
-    username            VARCHAR(20),
+    username            VARCHAR(200),
     PRIMARY KEY (username, link)
 );
 
@@ -89,7 +89,7 @@ CREATE TABLE Buyer (
 );
 
 CREATE TABLE Seller (
-	shop_name			VARCHAR(20) NOT NULL,
+# 	shop_name			VARCHAR(20) NOT NULL,
 	business_id 	    INT NOT NULL UNIQUE,
     username            VARCHAR(20) PRIMARY KEY
 );
@@ -100,17 +100,17 @@ CREATE TABLE Admin (
 );
 
 CREATE TABLE Shop (
-    business_id         INT PRIMARY KEY,
+    business_id         INT AUTO_INCREMENT PRIMARY KEY,
     name                VARCHAR(20) NOT NULL,
     address             VARCHAR(20) NOT NULL,
-    join_time           DATETIME NOT NULL,
+    join_time           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     business_type       ENUM('personal', 'business', 'family') NOT NULL,
     business_address    VARCHAR(20) NOT NULL,
     tax_number          INT NOT NULL # khac nhau tuy theo loai hinh kinh doanh (business_type)
 );
 
 CREATE TABLE Voucher (
-    voucher_id          INT PRIMARY KEY,
+    voucher_id          INT AUTO_INCREMENT PRIMARY KEY,
     name                VARCHAR(20) NOT NULL,
     expired_date        DATETIME NOT NULL,
     max_usage           INT NOT NULL, # co ve se khong dung den dau
@@ -125,7 +125,7 @@ CREATE TABLE Comment (
     product_id          INT,
     seller_usr          VARCHAR(20),
     buyer_usr           VARCHAR(20),
-    comment_id          INT UNIQUE, # moi comment nen chi co 1 id duy nhat
+    comment_id          INT AUTO_INCREMENT UNIQUE, # moi comment nen chi co 1 id duy nhat
     comment             TEXT,
     star                TINYINT NOT NULL CHECK (star IN (1, 2, 3, 4, 5)), # 1 den 5 sao
     attachment          TEXT,
@@ -134,7 +134,7 @@ CREATE TABLE Comment (
 );
 
 CREATE TABLE Product (
-    product_id          INT PRIMARY KEY,
+    product_id          INT AUTO_INCREMENT PRIMARY KEY,
     name                VARCHAR(20) NOT NULL,
     thumbnail           TEXT,
     info                TEXT,
@@ -151,7 +151,7 @@ CREATE TABLE Product_attachments (
 
 CREATE TABLE Variation (
     product_id          INT,
-    variation_id        INT UNIQUE, # moi bien the thi variation_id cua no cung unique
+    variation_id        INT AUTO_INCREMENT UNIQUE, # moi bien the thi variation_id cua no cung unique
     state               Enum('Available', 'Out of stock') NOT NULL, # Con / het
     amount              INT NOT NULL,
     price               INT NOT NULL,
@@ -168,7 +168,7 @@ CREATE TABLE Info_variation (
 );
 
 CREATE TABLE `Order` (
-    order_id            INT PRIMARY KEY,
+    order_id            INT AUTO_INCREMENT PRIMARY KEY,
     placed_date         DATETIME NOT NULL,
     shop_addr           VARCHAR(20), # dia chi lay hang
     delivery_addr       VARCHAR(20) NOT NULL,
@@ -184,7 +184,7 @@ CREATE TABLE `Order` (
 );
 
 CREATE TABLE Delivery (
-    delivery_id         INT PRIMARY KEY,
+    delivery_id         INT AUTO_INCREMENT PRIMARY KEY,
     name                VARCHAR(20) NOT NULL,
     method              ENUM('normal, express') NOT NULL
 );
@@ -193,14 +193,14 @@ CREATE TABLE Transaction (
     buyer_usr           VARCHAR(20),
     seller_usr          VARCHAR(20),
     order_id            INT,
-    trans_id            INT UNIQUE,
+    trans_id            INT AUTO_INCREMENT UNIQUE,
     reference_id        INT NOT NULL, # ma tham chieu giao dich
     timestamp           INT NOT NULL,
     PRIMARY KEY (buyer_usr, seller_usr, order_id, trans_id)
 );
 
 CREATE TABLE Cart (
-    cart_id             INT PRIMARY KEY,
+    cart_id             INT AUTO_INCREMENT PRIMARY KEY,
     seller_usr          VARCHAR(20)
 );
 
