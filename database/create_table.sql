@@ -140,12 +140,13 @@ CREATE TABLE Product (
     info                TEXT,
     category            VARCHAR(20) NOT NULL,
     business_id         INT,
-    admin_usr           VARCHAR(20)
+    admin_usr           VARCHAR(20),
+    active              BOOL DEFAULT TRUE NOT NULL
 );
 
 CREATE TABLE Product_attachments (
     product_id          INT,
-    link                VARCHAR(128) UNIQUE, # vi khong de text dc
+    link                VARCHAR(128), # vi khong de text dc
     PRIMARY KEY (product_id, link)
 );
 
@@ -156,12 +157,13 @@ CREATE TABLE Variation (
     amount              INT NOT NULL,
     price               INT NOT NULL,
     attachment          TEXT,
+    active              BOOL DEFAULT TRUE NOT NULL,
     PRIMARY KEY (product_id, variation_id)
 );
 
 CREATE TABLE Info_variation (
     product_id          INT,
-    variation_id        INT,
+    variation_id        INT UNIQUE,
     variation_type      VARCHAR(20),
     variation_value     VARCHAR(20),
     PRIMARY KEY (product_id, variation_id, variation_type, variation_value)

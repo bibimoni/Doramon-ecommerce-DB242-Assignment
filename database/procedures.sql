@@ -152,12 +152,12 @@ BEGIN
 
     INSERT INTO Seller (
 #                         Seller.shop_name,
-                        Seller.business_id,
-                        Seller.username)
+        Seller.business_id,
+        Seller.username)
     VALUES (
 #             in_shop_name,
-            LAST_INSERT_ID()
-               , in_username);
+             LAST_INSERT_ID()
+           , in_username);
 END //
 DELIMITER ;
 
@@ -240,8 +240,8 @@ BEGIN
            p.name               AS product_name,
            ohv.amount * v.price AS total
     FROM Order_has_variations AS ohv
-             JOIN Variation AS v ON ohv.variation_id = v.variation_id
-             JOIN Product AS p ON p.category = ohv.product_id
+             JOIN Variation AS v ON ohv.variation_id = v.variation_id AND v.active = TRUE
+             JOIN Product AS p ON p.category = ohv.product_id AND p.active = TRUE
              JOIN `Order` as o ON ohv.order_id = o.order_id
              JOIN Person as per ON o.buyer_usr = per.username
     WHERE p.product_id = in_category
@@ -264,8 +264,8 @@ BEGIN
            p.name       AS product_name
     FROM `Order` AS o
              JOIN Order_has_variations AS ohv ON o.order_id = ohv.order_id
-             JOIN Product AS p ON p.product_id = ohv.product_id
-             JOIN Variation AS v ON v.variation_id = ohv.variation_id
+             JOIN Product AS p ON p.product_id = ohv.product_id AND p.active = TRUE
+             JOIN Variation AS v ON v.variation_id = ohv.variation_id AND v.active = TRUE
     WHERE p.product_id = in_bid
       AND o.placed_date >= in_from
       AND o.state_type = 'finished'
@@ -280,5 +280,15 @@ BEGIN
                                       AND o.state_type = 'finished') as sub);
 
 
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE Proc_tobe_reviewed_product()
+BEGIN
+    SELECT *
+    FROM Product
+    WHERE admin_usr IS NULL
+      AND EXISTS (SELECT 1 FROM Variation WHERE Variation.product_id = Product.product_id);
 END //
 DELIMITER ;

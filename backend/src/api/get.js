@@ -7,6 +7,11 @@ import {
   getAddress,
   getBank,
   getSocial,
+  getProductOrVariation,
+  getShopProducts,
+  getProductAttachments,
+  getInfoVariation,
+  getProductVariations
 } from '../database.js';
 import express from 'express';
 const app = express.Router();
@@ -86,6 +91,66 @@ app.get('/users/social/:username', async (req, res) => {
   try {
     const results = await getSocial({ username });
     res.send({ success: true, data: results });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.get('/products/:product_id', async (req, res) => {
+  const product_id = req.params.product_id;
+  try {
+    const results = await getProductOrVariation({ product_id });
+    res.send({ success: true, data: results });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.get('/variations/:variation_id', async (req, res) => {
+  const variation_id = req.params.variation_id;
+  try {
+    const results = await getProductOrVariation({ variation_id });
+    res.send({ success: true, data: results });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.get('/sellers/products/:business_id', async (req, res) => {
+  const business_id = req.params.business_id;
+  try {
+    const results = await getShopProducts({ business_id });
+    res.send({ success: true, data: results });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.get('/products/attachments/:product_id', async (req, res) => {
+  const product_id = req.params.product_id;
+  try {
+    const ret = await getProductAttachments({ product_id });
+    res.send({ success: true, data: ret });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.get('/variations/info/:variation_id', async (req, res) => {
+  const variation_id = req.params.variation_id;
+  try {
+    const ret = await getInfoVariation({ variation_id });
+    res.send({ success: true, data: ret });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.get('/products/variations/:product_id', async (req, res) => {
+  const product_id = req.params.product_id;
+  try {
+    const ret = await getProductVariations({ product_id });
+    res.send({ success: true, data: ret });
   } catch (err) {
     res.send({ success: false, message: err.message });
   }

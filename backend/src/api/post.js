@@ -2,10 +2,14 @@ import express from 'express';
 const app = express.Router();
 import {
   addBuyer,
-  addSeller, 
+  addSeller,
   updateAddress,
   updateBank,
-  updateSocial
+  updateSocial,
+  addProduct,
+  updateProduct,
+  addVariation,
+  updateVariation,
 } from '../database.js';
 import { sha256 } from 'js-sha256';
 
@@ -28,7 +32,7 @@ app.post('/users/buyers', async (req, res) => {
   }
 });
 
-app.post('/users/sellers', async(req, res) => {
+app.post('/users/sellers', async (req, res) => {
   let {
     username,
     password,
@@ -51,9 +55,9 @@ app.post('/users/sellers', async(req, res) => {
       business_address,
       tax_number,
     });
-    res.send({success: true, data: sellerShop});
+    res.send({ success: true, data: sellerShop });
   } catch (err) {
-    res.send({success: false, message: err.message});
+    res.send({ success: false, message: err.message });
   }
 });
 
@@ -61,10 +65,10 @@ app.post('/users/address/:username', async (req, res) => {
   const username = req.params.username;
   const { list_address } = req.body;
   try {
-    const ret = await updateAddress({ username , list_address });
+    const ret = await updateAddress({ username, list_address });
     res.send({ success: true, data: ret });
   } catch (err) {
-    res.send({ success: false, message: err.message});
+    res.send({ success: false, message: err.message });
   }
 });
 
@@ -72,10 +76,10 @@ app.post('/users/bank/:username', async (req, res) => {
   const username = req.params.username;
   const { list_banks } = req.body;
   try {
-    const ret = await updateBank({ username , list_banks });
+    const ret = await updateBank({ username, list_banks });
     res.send({ success: true, data: ret });
   } catch (err) {
-    res.send({ success: false, message: err.message});
+    res.send({ success: false, message: err.message });
   }
 });
 
@@ -83,10 +87,133 @@ app.post('/users/social/:username', async (req, res) => {
   const username = req.params.username;
   const { list_socials } = req.body;
   try {
-    const ret = await updateSocial({ username , list_socials });
+    const ret = await updateSocial({ username, list_socials });
     res.send({ success: true, data: ret });
   } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.post('/sellers/products/add/:business_id', async (req, res) => {
+  const business_id = req.params.business_id;
+  const {
+    name,
+    thumbnail, // optional
+    info, // optional,
+    category, 
+    list_attachments = [] // optional 
+  } = req.body;
+  try {
+    const ret = await addProduct({
+      name,
+      thumbnail,
+      info,
+      category,
+      business_id,
+      list_attachments
+    });
+    res.send({ success: true, data: ret });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.post('/products/update/:product_id', async (req, res) => {
+  const product_id = req.params.product_id;
+  const { 
+    name, 
+    thumbnail, // optional
+    info, // optional
+    category, 
+    list_attachments = [] // optional
+  } = req.body;
+
+  try {
+    const ret = await updateProduct({
+      product_id, 
+      name,
+      thumbnail, 
+      info,
+      category,
+      list_attachments
+    });
+    res.send({data: ret, success: true });
+  } catch (err) {
     res.send({ success: false, message: err.message});
+  }
+});
+
+app.post('/products/remove/:product_id', async (req, res) => {
+  const product_id = req.params.product_id;
+  try {
+    const ret = await updateProduct({
+      product_id,
+      active: false,
+    });
+    res.send({ data: ret, success: true});
+  } catch (err) {
+    res.send({ success: false, message: err.message});
+  }
+});
+
+app.post('/products/variations/add/:product_id', async (req, res) => {
+  const product_id = req.params.product_id;
+  const {
+    state,
+    amount,
+    price,
+    attachment, /* optional */
+    list_info = [] /* optional */
+  } = req.body;
+  try {
+    const ret = await addVariation({
+      product_id,
+      state,
+      amount,
+      price,
+      attachment,
+      list_info /* type, value */
+    });
+    res.send({success: true, data: ret});
+  } catch (err) {
+    res.send({success: false, message: err.message});
+  }
+});
+
+app.post('/variations/update/:variation_id', async (req, res) => {
+  const variation_id = req.params.variation_id;
+  const {
+    state,
+    amount,
+    price,
+    attachment, /* optional */
+    list_info = [] /* optional */
+  } = req.body;
+  try {
+    const ret = await updateVariation({
+      variation_id,
+      state,
+      amount,
+      price,
+      attachment,
+      list_info /* type, value */
+    });
+    res.send({success: true, data: ret});
+  } catch (err) {
+    res.send({success: false, message: err.message});
+  }
+});
+
+app.post('/variations/remove/:variation_id', async (req, res) => {
+  const variation_id = req.params.variation_id;
+  try {
+    const ret = await updateVariation({
+      variation_id,
+      active: false,
+    });
+    res.send({success: true, data: ret});
+  } catch (err) {
+    res.send({success: false, message: err.message});
   }
 });
 

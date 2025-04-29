@@ -221,3 +221,227 @@ export async function updateBank({
     throw err;
   }
 }
+
+export async function getShopProducts({ business_id }) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT * 
+      FROM Product p 
+      WHERE p.business_id = ?
+      `, [business_id]);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getProductVariations({ product_id }) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT *
+      FROM Variation 
+      WHERE product_id = ?
+      `, [product_id]);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getProductOrVariation({ product_id = null, variation_id = null}) {
+  try {
+    if (product_id !== null) {
+      const [rows] = await pool.query(`
+        SELECT * FROM Product p 
+        WHERE p.product_id = ?
+        `, [product_id]);
+  
+      return rows[0];
+    } else if (variation_id !== null) {
+      const [rows] = await pool.query(`
+        SELECT * FROM Variation v
+        WHERE v.variation_id = ?
+        `, [variation_id]);
+        
+      return rows[0];
+    } 
+
+    throw Error("Please provide either product_id or variation_id")
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getProductAttachments({ product_id }) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT * FROM Product_attachments
+      WHERE product_id = ?
+      `, [product_id]);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function addProduct({
+  name, 
+  thumbnail,
+  info, 
+  category,
+  business_id,
+  list_attachments = []
+}) {
+  try {
+    const [result] = await pool.query(`
+      INSERT INTO Product(name, thumbnail, info, category, business_id)
+      VALUES (?, ?, ?, ?, ?)
+      `, [name, thumbnail, info, category, business_id]);
+    for (const link of list_attachments) {
+      await pool.query(`
+        INSERT INTO Product_attachments(product_id, link)
+        VALUES (?, ?)
+        `, [result.insertId, link]);
+    }
+    return await getProductOrVariation({ product_id: result.insertId });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function updateProduct({ 
+  product_id,
+  name, 
+  thumbnail,
+  info, 
+  category,
+  list_attachments = [],
+  active = null,
+}) {
+  try {
+    if (active === null) {
+      await pool.query(`
+        UPDATE Product 
+        SET name = ?,
+          thumbnail = ?,
+          info = ?,
+          category = ?
+        WHERE product_id = ?
+        `, [name, thumbnail, info, category, product_id]);
+      await pool.query(`
+        DELETE FROM Product_attachments
+        WHERE product_id = ?
+        `, [product_id]);
+        
+      for (const link of list_attachments) {
+        await pool.query(`
+          INSERT INTO 
+          Product_attachments(product_id, link)
+          VALUES (?, ?)
+          `, [product_id, link]);
+      }
+    } else {
+      await pool.query(`
+        UPDATE Product 
+        SET active = ?
+        WHERE product_id = ?
+        `, [active, product_id]);
+    }
+    return await getProductOrVariation({ product_id });
+    } catch (err) {
+    throw err;
+  }
+}
+
+export async function addVariation({
+  product_id,
+  state, 
+  amount,
+  price,
+  attachment, /* optional */
+  list_info = [],
+}) {
+  try {
+    const [result] = await pool.query(`
+      INSERT INTO Variation(product_id, state, amount, price, attachment)
+      VALUES (?, ?, ?, ?, ?)
+      `, [product_id, state, amount, price, attachment]);
+
+    for (const info of list_info) {
+      await pool.query(`
+        INSERT INTO Info_variation(product_id, variation_id, variation_type, variation_value)
+        VALUES (?, ?, ?, ?)
+        `, [product_id, result.insertId, info.type, info.value]);
+    }
+
+    return await getProductOrVariation({
+      variation_id: result.insertId
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function updateVariation({
+  variation_id, 
+  state,
+  amount,
+  price,
+  attachment, /* optional */
+  list_info = [],
+  active = null
+}) {
+  try {
+    if (active === null) {
+      await pool.query(`
+        UPDATE Variation 
+        SET state = ?,
+          amount = ?,
+          price = ?,
+          attachment = ?
+        WHERE variation_id = ?
+        `, [state, amount, price, attachment, variation_id]); 
+      
+      const [rows] = await pool.query(`
+        SELECT product_id FROM Variation
+        WHERE Variation.variation_id = ?
+        `, [variation_id]);
+
+      const product_id = rows[0].product_id;
+
+      await pool.query(`
+        DELETE FROM Info_variation WHERE variation_id = ?
+        `, [variation_id]);
+
+      for (const info of list_info) {
+        await pool.query(`
+          INSERT INTO Info_variation(product_id, variation_id, variation_type, variation_value)
+          VALUES (?, ?, ?, ?)
+          `, [product_id, variation_id, info.type, info.value]);
+      }
+    } else {
+      await pool.query(`
+        UPDATE Variation
+        SET active = ?
+        WHERE variation_id = ?
+      `, [active, variation_id]);
+    }
+    return await getProductOrVariation({ variation_id });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getInfoVariation({ variation_id }) {
+  try { 
+    const [rows] = await pool.query(`
+      SELECT * FROM Info_variation
+      WHERE variation_id = ?
+      `, [variation_id]);
+
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+}
+

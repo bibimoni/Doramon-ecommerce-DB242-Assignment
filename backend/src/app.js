@@ -12,5 +12,3 @@ app.use('/', postRoutes);
 app.listen(port, () => {
   console.log(`Hello from ${port}`);
 });
-
-export { app };
