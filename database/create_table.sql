@@ -203,7 +203,7 @@ CREATE TABLE Transaction (
 
 CREATE TABLE Cart (
     cart_id             INT AUTO_INCREMENT PRIMARY KEY,
-    seller_usr          VARCHAR(20)
+    buyer_usr           VARCHAR(20)
 );
 
 CREATE TABLE Create_voucher (

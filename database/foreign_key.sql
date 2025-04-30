@@ -129,9 +129,9 @@ ADD CONSTRAINT fl_trans_order
 
 # ...
 ALTER TABLE Cart
-ADD CONSTRAINT fk_cart_sellusr
-    FOREIGN KEY (seller_usr)
-        REFERENCES Seller(username) ON DELETE CASCADE;
+ADD CONSTRAINT fk_cart_buyusr
+    FOREIGN KEY (buyer_usr)
+        REFERENCES Buyer(username) ON DELETE CASCADE;
 
 # ...
 ALTER TABLE Create_voucher
