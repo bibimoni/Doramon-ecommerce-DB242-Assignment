@@ -11,7 +11,8 @@ import {
   getShopProducts,
   getProductAttachments,
   getInfoVariation,
-  getProductVariations
+  getProductVariations,
+  getVariationsFromCart
 } from '../database.js';
 import express from 'express';
 const app = express.Router();
@@ -153,6 +154,18 @@ app.get('/products/variations/:product_id', async (req, res) => {
     res.send({ success: true, data: ret });
   } catch (err) {
     res.send({ success: false, message: err.message });
+  }
+});
+
+app.get('/buyers/cart/:buyer_username', async (req, res) => {
+  const buyer_username = req.params.buyer_username;
+  try {
+    const ret = await getVariationsFromCart({
+      buyer_username,
+    });
+    res.send({ success: true, data: ret });
+  } catch (err) {
+    res.end({ success: false, message: err.message });
   }
 });
 

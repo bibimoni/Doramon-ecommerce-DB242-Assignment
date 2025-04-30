@@ -7,6 +7,9 @@ DROP PROCEDURE IF EXISTS Proc_Insert_product;
 DROP PROCEDURE IF EXISTS Proc_Sales_by_category;
 DROP PROCEDURE IF EXISTS Proc_Best_sale_from_date;
 DROP PROCEDURE IF EXISTS Proc_Unreviewed_product;
+DROP PROCEDURE IF EXISTS Proc_update_cart_variation;
+DROP PROCEDURE IF EXISTS Proc_get_variations_from_cart;
+DROP PROCEDURE IF EXISTS Proc_tobe_reviewed_product;
 
 DELIMITER //
 CREATE PROCEDURE Proc_Insert_person(
@@ -290,5 +293,83 @@ BEGIN
     FROM Product
     WHERE admin_usr IS NULL
       AND EXISTS (SELECT 1 FROM Variation WHERE Variation.product_id = Product.product_id);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE Proc_update_cart_variation(
+    IN in_buyer_usr VARCHAR(20),
+    IN in_variation_id INT,
+    IN in_amount INT
+)
+BEGIN
+    DECLARE v_product_id INT;
+    DECLARE v_active BOOL;
+    DECLARE v_cart_id INT;
+
+    SELECT p.product_id, p.active
+    INTO v_product_id, v_active
+    FROM Variation AS v
+             JOIN Product AS p ON p.product_id = v.product_id
+    WHERE variation_id = in_variation_id
+      AND v.active = TRUE
+    LIMIT 1;
+
+    SELECT c.cart_id INTO v_cart_id
+    FROM Cart c
+    WHERE c.buyer_usr = in_buyer_usr
+    LIMIT 1;
+
+    IF v_product_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'variation_id not found or variation inactive';
+    ELSEIF v_cart_id IS NULL THEN
+    SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'buyer_username not found';
+    ELSEIF v_active = FALSE THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Parent product is inactive';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1
+        FROM Cart_has_variations
+        WHERE cart_id = v_cart_id AND variation_id = in_variation_id
+    )
+    THEN
+        UPDATE Cart_has_variations
+        SET amount = in_amount
+        WHERE cart_id = v_cart_id
+          AND variation_id = in_variation_id
+          AND product_id = v_product_id;
+    ELSE
+        INSERT INTO Cart_has_variations(cart_id, product_id, variation_id, amount)
+        VALUES (v_cart_id, v_product_id, in_variation_id, in_amount);
+    END IF;
+
+    DELETE FROM Cart_has_variations
+    WHERE amount <= 0;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE Proc_get_variations_from_cart(
+    IN username VARCHAR(20)
+)
+BEGIN
+    SELECT
+        v.product_id,
+        v.variation_id,
+        v.state,
+        v.amount as variation_amount,
+        v.price,
+        v.attachment,
+        cv.amount as cart_amount
+    FROM Variation v
+    JOIN Cart_has_variations cv ON cv.variation_id = v.variation_id
+    WHERE cv.cart_id IN (
+        SELECT c.cart_id FROM Cart c
+                         WHERE buyer_usr = username
+        );
 END //
 DELIMITER ;

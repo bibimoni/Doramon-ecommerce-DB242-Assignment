@@ -11,79 +11,106 @@ const pool = mysql.createPool({
 }).promise();
 
 export async function getUsers() {
-  const [rows] = await pool.query(`
+  try {
+    const [rows] = await pool.query(`
     SELECT * 
     FROM 
-      Person
+    Person
     ORDER BY
-      username
-    `);
-  return rows;
+        username
+      `);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
 }
 
 export async function getBuyers() {
-  const [rows] = await pool.query(`
-    SELECT * 
-    FROM 
-      Person p 
-    JOIN Buyer b ON p.username = b.username
-    ORDER BY
-      p.username
-    `);
-  return rows;
-}
-
-export async function getBuyer({username}) {
-  const [rows] = await pool.query(`
-    SELECT * 
-    FROM 
-      Person p
-    JOIN Buyer b ON p.username = b.username
-    WHERE
-      p.username = ?
-    `, [username]);
-  
-  return checkExists(rows[0]);
-}
-
-export async function addBuyer({username, password, email}) {
-  await pool.query(`
-  CALL Proc_Insert_buyer(
-    ?,
-    ?,
-    ?,
-    null, null, false, null, null, null
-  )`, [username, password, email]);
   try {
-    return await getBuyer({username});
+    const [rows] = await pool.query(`
+      SELECT * 
+      FROM 
+        Person p 
+      JOIN Buyer b ON p.username = b.username
+      JOIN Cart c ON c.buyer_usr = b.username
+      ORDER BY
+        p.username
+      `);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getBuyer({ username }) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT * 
+      FROM 
+        Person p
+      JOIN Buyer b ON p.username = b.username
+      JOIN Cart c ON c.buyer_usr = b.username
+      WHERE
+        p.username = ?
+      `, [username]);
+    return checkExists(rows[0]);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function addBuyer({ username, password, email }) {
+  try {
+    await pool.query(`
+      CALL Proc_Insert_buyer(
+        ?,
+        ?,
+        ?,
+        null, null, false, null, null, null
+      )`, [username, password, email]);
+
+    await pool.query(`
+      INSERT INTO Cart(buyer_usr) 
+      VALUES (?)  
+      `, [username]);
+
+    return await getBuyer({ username });
   } catch (err) {
     throw err;
   }
 }
 
 export async function getSellerShops() {
-  const [rows] = await pool.query(`
-    SELECT *
-    FROM 
-      Person p
-    JOIN Seller s ON s.username = p.username
-    JOIN Shop sh ON sh.business_id = s.business_id
-    ORDER BY
-      p.username
-    `);
-  return rows;
+  try {
+    const [rows] = await pool.query(`
+      SELECT *
+      FROM 
+        Person p
+      JOIN Seller s ON s.username = p.username
+      JOIN Shop sh ON sh.business_id = s.business_id
+      ORDER BY
+        p.username
+      `);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
 }
 
-export async function getSellerShop({username}) {
-  const [rows] = await pool.query(`
-    SELECT *
-    FROM 
-      Person p
-    JOIN Seller s ON s.username = p.username
-    JOIN Shop sh ON sh.business_id = s.business_id
-    WHERE p.username = ?
-    `, [username]);
-  return checkExists(rows[0]);
+export async function getSellerShop({ username }) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT *
+      FROM 
+        Person p
+      JOIN Seller s ON s.username = p.username
+      JOIN Shop sh ON sh.business_id = s.business_id
+      WHERE p.username = ?
+      `, [username]);
+    return checkExists(rows[0]);
+  } catch (err) {
+    throw err;
+  }
 }
 
 export async function addSeller({
@@ -96,28 +123,28 @@ export async function addSeller({
   business_address,
   tax_number,
 }) {
-  await pool.query(`
-  CALL Proc_Insert_Seller(
-    ?, ?, ?, null, null, false, null, null, 
-    ?, ?, ?, ?, ?
-  )`, [
-    username, 
-    password, 
-    email, 
-    shopname, 
-    address, 
-    business_type, 
-    business_address, 
-    tax_number
-  ]);
   try {
-    return await getSellerShop({username});
+    await pool.query(`
+    CALL Proc_Insert_Seller(
+      ?, ?, ?, null, null, false, null, null, 
+      ?, ?, ?, ?, ?
+    )`, [
+      username,
+      password,
+      email,
+      shopname,
+      address,
+      business_type,
+      business_address,
+      tax_number
+    ]);
+    return await getSellerShop({ username });
   } catch (err) {
     throw err;
   }
 }
 
-export async function getAddress({username}) {
+export async function getAddress({ username }) {
   const [rows] = await pool.query(`
     SELECT address FROM Address WHERE username = ?
     `, [username]);
@@ -152,7 +179,7 @@ export async function updateAddress({
   }
 }
 
-export async function getSocial({username}) {
+export async function getSocial({ username }) {
   const [rows] = await pool.query(`
     SELECT link FROM Social WHERE username = ?
     `, [username]);
@@ -187,11 +214,13 @@ export async function updateSocial({
   }
 }
 
-export async function getBank({username}) {
-  const [rows] = await pool.query(`
+export async function getBank({ username }) {
+  try {
+    const [rows] = await pool.query(`
     SELECT bank_name, bank_number, bank_type FROM Banking_account WHERE username = ?
     `, [username]);
-  return rows;
+    return rows;
+  } catch (err) { throw err; }
 }
 
 export async function updateBank({
@@ -248,23 +277,23 @@ export async function getProductVariations({ product_id }) {
   }
 }
 
-export async function getProductOrVariation({ product_id = null, variation_id = null}) {
+export async function getProductOrVariation({ product_id = null, variation_id = null }) {
   try {
     if (product_id !== null) {
       const [rows] = await pool.query(`
         SELECT * FROM Product p 
         WHERE p.product_id = ?
         `, [product_id]);
-  
+
       return rows[0];
     } else if (variation_id !== null) {
       const [rows] = await pool.query(`
         SELECT * FROM Variation v
         WHERE v.variation_id = ?
         `, [variation_id]);
-        
+
       return rows[0];
-    } 
+    }
 
     throw Error("Please provide either product_id or variation_id")
   } catch (err) {
@@ -285,9 +314,9 @@ export async function getProductAttachments({ product_id }) {
 }
 
 export async function addProduct({
-  name, 
+  name,
   thumbnail,
-  info, 
+  info,
   category,
   business_id,
   list_attachments = []
@@ -309,11 +338,11 @@ export async function addProduct({
   }
 }
 
-export async function updateProduct({ 
+export async function updateProduct({
   product_id,
-  name, 
+  name,
   thumbnail,
-  info, 
+  info,
   category,
   list_attachments = [],
   active = null,
@@ -332,7 +361,7 @@ export async function updateProduct({
         DELETE FROM Product_attachments
         WHERE product_id = ?
         `, [product_id]);
-        
+
       for (const link of list_attachments) {
         await pool.query(`
           INSERT INTO 
@@ -348,14 +377,14 @@ export async function updateProduct({
         `, [active, product_id]);
     }
     return await getProductOrVariation({ product_id });
-    } catch (err) {
+  } catch (err) {
     throw err;
   }
 }
 
 export async function addVariation({
   product_id,
-  state, 
+  state,
   amount,
   price,
   attachment, /* optional */
@@ -383,7 +412,7 @@ export async function addVariation({
 }
 
 export async function updateVariation({
-  variation_id, 
+  variation_id,
   state,
   amount,
   price,
@@ -400,8 +429,8 @@ export async function updateVariation({
           price = ?,
           attachment = ?
         WHERE variation_id = ?
-        `, [state, amount, price, attachment, variation_id]); 
-      
+        `, [state, amount, price, attachment, variation_id]);
+
       const [rows] = await pool.query(`
         SELECT product_id FROM Variation
         WHERE Variation.variation_id = ?
@@ -433,7 +462,7 @@ export async function updateVariation({
 }
 
 export async function getInfoVariation({ variation_id }) {
-  try { 
+  try {
     const [rows] = await pool.query(`
       SELECT * FROM Info_variation
       WHERE variation_id = ?
@@ -445,3 +474,24 @@ export async function getInfoVariation({ variation_id }) {
   }
 }
 
+export async function updateCart({ buyer_username, variation_id, amount }) {
+  try {
+    await pool.query(`
+      CALL Proc_update_cart_variation(?, ?, ?)
+      `, [buyer_username, variation_id, amount]);
+    return await getVariationsFromCart({ buyer_username });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getVariationsFromCart({ buyer_username }) {
+  try {
+    const [[rows]] = await pool.query(`
+      CALL Proc_get_variations_from_cart(?)
+      `, [buyer_username]);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+}
