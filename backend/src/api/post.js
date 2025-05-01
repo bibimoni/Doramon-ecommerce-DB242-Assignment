@@ -11,6 +11,7 @@ import {
   addVariation,
   updateVariation,
   updateCart,
+  addAdmin,
 } from '../database.js';
 import { sha256 } from 'js-sha256';
 
@@ -227,6 +228,22 @@ app.post('/buyers/cart/update/:buyer_username', async (req, res) => {
   try {
     const ret = await updateCart({ buyer_username, variation_id, amount });
     res.send({ success: true, data: ret });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.post('/users/admins', async (req, res) => {
+  let {
+    username,
+    password,
+    email, /* optional */
+    perm // either 1, 2, 3
+  } = req.body;
+  email ??= null;
+  password = sha256(password); // hash password
+  try {
+    res.send({ success: true, data : await addAdmin( {username, password, email, perm })})
   } catch (err) {
     res.send({ success: false, message: err.message });
   }

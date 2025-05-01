@@ -80,6 +80,52 @@ export async function addBuyer({ username, password, email }) {
   }
 }
 
+export async function getAdmins() {
+  try {
+    const [rows] = await pool.query(`
+      SELECT * FROM Person p
+      JOIN Admin ad ON ad.username = p.username
+      `);
+    
+      return rows;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getAdmin({ username }) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT * FROM Person p
+      JOIN Admin ad ON ad.username = p.username
+      WHERE 
+        p.username = ?
+      `, [username])
+    return checkExists(rows[0]);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function addAdmin({
+  username,
+  password,
+  email,
+  perm
+}) {
+  try {
+    await pool.query(`
+      CALL Proc_Insert_admin(
+        ?, ?, ?, null, null, false, null, null, ?
+      )
+      `, [username, password, email, perm]);
+    
+    return await getAdmin({ username });
+  } catch (err) {
+    throw err;
+  }
+}
+
 export async function getSellerShops() {
   try {
     const [rows] = await pool.query(`

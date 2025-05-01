@@ -12,7 +12,9 @@ import {
   getProductAttachments,
   getInfoVariation,
   getProductVariations,
-  getVariationsFromCart
+  getVariationsFromCart,
+  getAdmins,
+  getAdmin,
 } from '../database.js';
 import express from 'express';
 const app = express.Router();
@@ -166,6 +168,23 @@ app.get('/buyers/cart/:buyer_username', async (req, res) => {
     res.send({ success: true, data: ret });
   } catch (err) {
     res.end({ success: false, message: err.message });
+  }
+});
+
+app.get('/users/admins', async (req, res) => {
+  try {
+    res.send({ success: true, data: await getAdmins() });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.get('/users/admins/:username', async (req, res) => {
+  const username = req.params.username;
+  try {
+    res.send({ success: true, data: await getAdmin({ username }) });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
   }
 });
 
