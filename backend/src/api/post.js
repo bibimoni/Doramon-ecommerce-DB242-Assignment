@@ -264,7 +264,6 @@ app.post('/users/sellers/voucher', async (req, res) => {
 
   for (const voucher of voucher_list) {
     const {
-      voucher_id,
       name,
       expired_date,
       seller_usr,
@@ -276,12 +275,10 @@ app.post('/users/sellers/voucher', async (req, res) => {
     } = voucher;
 
     // Kiểm tra các tham số cần thiết
-    if (
-      !voucher_id || !name || !expired_date || !seller_usr || !max_usage ||
+    if (!name || !expired_date || !seller_usr || !max_usage ||
       decrease_type == null || decrease_value == null || min_buy_value == null || max_decrease_value == null
     ) {
       results.push({
-        voucher_id: voucher.voucher_id || null,
         success: false,
         message: 'Thiếu thông tin trong voucher'
       });
@@ -292,7 +289,6 @@ app.post('/users/sellers/voucher', async (req, res) => {
       // Gọi hàm addVoucher và truyền voucher vào dưới dạng mảng
       const result = await addVoucherBySeller({
         voucher_list: [{
-          voucher_id,
           name,
           expired_date,
           seller_usr,
@@ -305,13 +301,11 @@ app.post('/users/sellers/voucher', async (req, res) => {
       });
 
       results.push({
-        voucher_id,
         success: true,
         data: result
       });
     } catch (err) {
       results.push({
-        voucher_id,
         success: false,
         message: err.message
       });
@@ -332,7 +326,6 @@ app.post('/users/admins/voucher', async (req, res) => {
 
   for (const voucher of voucher_list) {
     const {
-      voucher_id,
       name,
       expired_date,
       max_usage,
@@ -343,12 +336,10 @@ app.post('/users/admins/voucher', async (req, res) => {
     } = voucher;
 
     // Kiểm tra các tham số cần thiết
-    if (
-      !voucher_id || !name || !expired_date || !max_usage ||
+    if (!name || !expired_date || !max_usage ||
       decrease_type == null || decrease_value == null || min_buy_value == null || max_decrease_value == null
     ) {
       results.push({
-        voucher_id: voucher.voucher_id || null,
         success: false,
         message: 'Thiếu thông tin trong voucher'
       });
@@ -359,7 +350,6 @@ app.post('/users/admins/voucher', async (req, res) => {
       // Gọi hàm addVoucher và truyền voucher vào dưới dạng mảng
       const result = await addVoucherByAdmin({
         voucher_list: [{
-          voucher_id,
           name,
           expired_date,
           max_usage,
@@ -371,13 +361,11 @@ app.post('/users/admins/voucher', async (req, res) => {
       });
 
       results.push({
-        voucher_id,
         success: true,
         data: result
       });
     } catch (err) {
       results.push({
-        voucher_id,
         success: false,
         message: err.message
       });

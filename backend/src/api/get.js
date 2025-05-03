@@ -203,7 +203,6 @@ app.get('/voucher/:seller_usr', async (req, res) => {
   }
 });
 
-
 /*From main page or in Voucher site */
 app.get('/voucher', async (req, res) => {
   const seller_usr = req.params.voucher;

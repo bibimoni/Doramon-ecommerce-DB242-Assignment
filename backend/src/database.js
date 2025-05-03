@@ -547,7 +547,6 @@ export async function addVoucherBySeller({voucher_list = []}) {
   const results = [];
   for (const voucher of voucher_list) {
     const {
-      voucher_id,
       name,
       expired_date,
       seller_usr,
@@ -558,8 +557,7 @@ export async function addVoucherBySeller({voucher_list = []}) {
       max_decrease_value
     } = voucher;
 
-    if (
-      !voucher_id || !name || !expired_date || !seller_usr || !max_usage || 
+    if (!name || !expired_date || !seller_usr || !max_usage || 
       decrease_type == null || decrease_value == null || min_buy_value == null || max_decrease_value == null
     ) {
       throw new Error(`Not enough information for voucher: ${JSON.stringify(voucher)}`);
@@ -567,11 +565,10 @@ export async function addVoucherBySeller({voucher_list = []}) {
 
     try {
       const sql = `
-        INSERT INTO Voucher (voucher_id, name, expired_date, seller_usr, max_usage, decrease_type, decrease_value, min_buy_value, max_decrease_value)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO Voucher (name, expired_date, seller_usr, max_usage, decrease_type, decrease_value, min_buy_value, max_decrease_value)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `;
       const [result] = await pool.execute(sql, [
-        voucher_id,
         name,
         expired_date,
         seller_usr,
@@ -583,7 +580,6 @@ export async function addVoucherBySeller({voucher_list = []}) {
       ]);
 
       results.push({
-        voucher_id,
         name,
         expired_date,
         seller_usr,
@@ -595,7 +591,7 @@ export async function addVoucherBySeller({voucher_list = []}) {
       });
 
     } catch (err) {
-      throw new Error(`Error when add voucher ${voucher_id}: ${err.message}`);
+      throw new Error(`Error when add voucher ${name}: ${err.message}`);
     }
   }
 
@@ -621,7 +617,6 @@ export async function addVoucherByAdmin({voucher_list = []}) {
   const results = [];
   for (const voucher of voucher_list) {
     const {
-      voucher_id,
       name,
       expired_date,
       max_usage,
@@ -631,8 +626,7 @@ export async function addVoucherByAdmin({voucher_list = []}) {
       max_decrease_value
     } = voucher;
 
-    if (
-      !voucher_id || !name || !expired_date || !max_usage || 
+    if (!name || !expired_date || !max_usage || 
       decrease_type == null || decrease_value == null || min_buy_value == null || max_decrease_value == null
     ) {
       throw new Error(`Not enough information for voucher: ${JSON.stringify(voucher)}`);
@@ -640,11 +634,10 @@ export async function addVoucherByAdmin({voucher_list = []}) {
 
     try {
       const sql = `
-        INSERT INTO Voucher (voucher_id, name, expired_date, max_usage, decrease_type, decrease_value, min_buy_value, max_decrease_value)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO Voucher (name, expired_date, max_usage, decrease_type, decrease_value, min_buy_value, max_decrease_value)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
       const [result] = await pool.execute(sql, [
-        voucher_id,
         name,
         expired_date,
         max_usage,
@@ -655,7 +648,6 @@ export async function addVoucherByAdmin({voucher_list = []}) {
       ]);
 
       results.push({
-        voucher_id,
         name,
         expired_date,
         max_usage,
@@ -666,7 +658,7 @@ export async function addVoucherByAdmin({voucher_list = []}) {
       });
 
     } catch (err) {
-      throw new Error(`Error when add voucher ${voucher_id}: ${err.message}`);
+      throw new Error(`Error when add voucher ${name}: ${err.message}`);
     }
   }
 
@@ -677,7 +669,7 @@ export async function addVoucherByAdmin({voucher_list = []}) {
 export async function getVouchers(){
   try {
     const [rows] = await pool.query(`
-      SELECT name, voucher_id
+      SELECT *
       FROM 
       Voucher
       `);
@@ -686,5 +678,7 @@ export async function getVouchers(){
     throw err;
   }
 }
+
+
 
 
