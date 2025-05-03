@@ -299,20 +299,12 @@ app.post('/users/sellers/voucher', async (req, res) => {
           max_decrease_value
         }]
       });
-
-      results.push({
-        success: true,
-        data: result
-      });
+      res.send({success: true, data: result});
     } catch (err) {
-      results.push({
-        success: false,
-        message: err.message
-      });
+      res.send({success: false, message: err.message});
     }
   }
-
-  res.send({ success: true, data: results });
+  //res.send({ success: true, data: results });
 });
 
 app.post('/users/admins/voucher', async (req, res) => {
@@ -359,16 +351,9 @@ app.post('/users/admins/voucher', async (req, res) => {
           max_decrease_value
         }]
       });
-
-      results.push({
-        success: true,
-        data: result
-      });
+      res.send({success: true, data: result});
     } catch (err) {
-      results.push({
-        success: false,
-        message: err.message
-      });
+      res.send({success: false, message: err.message});
     }
   }
 

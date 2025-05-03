@@ -557,12 +557,6 @@ export async function addVoucherBySeller({voucher_list = []}) {
       max_decrease_value
     } = voucher;
 
-    if (!name || !expired_date || !seller_usr || !max_usage || 
-      decrease_type == null || decrease_value == null || min_buy_value == null || max_decrease_value == null
-    ) {
-      throw new Error(`Not enough information for voucher: ${JSON.stringify(voucher)}`);
-    }
-
     try {
       const sql = `
         INSERT INTO Voucher (name, expired_date, seller_usr, max_usage, decrease_type, decrease_value, min_buy_value, max_decrease_value)
