@@ -10,6 +10,37 @@ const pool = mysql.createPool({
   database: 'shopee'
 }).promise();
 
+export async function editUser({
+  username,
+  password,
+  email,
+  birth_day,/* YYYY-MM-DD */
+  phone_number, /* 10-11 numbers */
+  avatar_link,
+  gender /* either 'm' or 'f' */
+}) {
+  try {
+    await pool.query(`
+      UPDATE Person
+      SET hashed_password = ?,
+        email = ?,
+        birth_day = ?,
+        phone_number = ?,
+        avatar_link = ?,
+        gender = ?
+      WHERE username = ?
+      `, [password, email, birth_day, phone_number, avatar_link, gender, username]);
+    
+    const [rows] = await pool.query(`
+      SELECT * FROM Person
+      WHERE username = ?
+      `, [username]);
+    return rows[0];
+  } catch (err) {
+    throw err;
+  }
+}
+
 export async function getUsers() {
   try {
     const [rows] = await pool.query(`

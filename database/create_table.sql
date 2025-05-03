@@ -45,7 +45,7 @@ DROP TABLE IF EXISTS Person;
 CREATE TABLE Person (
 	username 			VARCHAR(20) NOT NULL PRIMARY KEY,
     hashed_password     VARCHAR(100) NOT NULL,
-    email				VARCHAR(20),
+    email				VARCHAR(100),
     birth_day			DATE,
     phone_number		VARCHAR(11),
     is_banned           BOOL NOT NULL,

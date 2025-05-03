@@ -13,8 +13,31 @@ import {
   updateCart,
   addAdmin,
   reviewProduct,
+  editUser,
 } from '../database.js';
 import { sha256 } from 'js-sha256';
+
+app.post('/users/edit/:username', async (req, res) => {
+  const username = req.params.username;
+  let {
+    password, /* Must */
+    email, 
+    birth_day, /* YYYY-MM-DD */
+    phone_number, /* 10-11 numbers */
+    avatar_link,
+    gender /* either 'm' or 'f' */
+  } = req.body;
+  try {
+    if (!password) {
+      res.send({ success: false, message: "Please provide password" });
+      return;
+    }
+    password = sha256(password);
+    res.send({ success : true, data: await editUser({ username, password, email, birth_day, phone_number, avatar_link, gender })});
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
 
 app.post('/users/buyers', async (req, res) => {
   let { username, password, email } = req.body;
