@@ -1,0 +1,16 @@
+export async function getBuyer({ username }) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT * 
+      FROM 
+        Person p
+      JOIN Buyer b ON p.username = b.username
+      JOIN Cart c ON c.buyer_usr = b.username
+      WHERE
+        p.username = ?
+      `, [username]);
+    return checkExists(rows[0]);
+  } catch (err) {
+    throw err;
+  }
+}
