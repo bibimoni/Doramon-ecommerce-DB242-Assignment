@@ -253,7 +253,7 @@ app.post('/users/admins', async (req, res) => {
 });
 
 
-app.post('voucher/sellers', async (req, res) => {
+app.post('/voucher/sellers', async (req, res) => {
   const { voucher_list } = req.body;
 
   if (!Array.isArray(voucher_list) || voucher_list.length === 0) {
@@ -299,15 +299,15 @@ app.post('voucher/sellers', async (req, res) => {
           max_decrease_value
         }]
       });
-      res.send({success: true, data: result});
+      results.push({success: true, data: result});
     } catch (err) {
       res.send({success: false, message: err.message});
     }
   }
-  //res.send({ success: true, data: results });
+  res.send({ success: true, data: results });
 });
 
-app.post('voucher/admins', async (req, res) => {
+app.post('/voucher/admins', async (req, res) => {
   const { voucher_list } = req.body;
 
   if (!Array.isArray(voucher_list) || voucher_list.length === 0) {
@@ -351,12 +351,11 @@ app.post('voucher/admins', async (req, res) => {
           max_decrease_value
         }]
       });
-      res.send({success: true, data: result});
+      results.push({success: true, data: result});
     } catch (err) {
       res.send({success: false, message: err.message});
     }
   }
-
   res.send({ success: true, data: results });
 
 });
