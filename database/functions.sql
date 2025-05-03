@@ -1,5 +1,6 @@
 USE shopee;
 DROP FUNCTION IF EXISTS Func_Valid_name;
+DROP FUNCTION IF EXISTS Exists_Admin;
 
 DELIMITER //
 CREATE FUNCTION Func_Valid_name(s VARCHAR(255))
@@ -11,5 +12,15 @@ BEGIN
     END IF;
 
     RETURN TRUE;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE FUNCTION Exists_Admin(in_admin_usr VARCHAR(20))
+    RETURNS BOOLEAN
+    DETERMINISTIC
+BEGIN
+    RETURN EXISTS (SELECT 1 FROM Admin WHERE username = in_admin_usr);
 END //
 DELIMITER ;

@@ -15,6 +15,8 @@ import {
   getVariationsFromCart,
   getAdmins,
   getAdmin,
+  getAllProductsToDisplay,
+  getUnreviewedProduct,
 } from '../database.js';
 import express from 'express';
 const app = express.Router();
@@ -185,6 +187,22 @@ app.get('/users/admins/:username', async (req, res) => {
     res.send({ success: true, data: await getAdmin({ username }) });
   } catch (err) {
     res.send({ success: false, message: err.message });
+  }
+});
+
+app.get('/all/products/', async (req, res) => {
+  try {
+    res.send({ success : true, data : await getAllProductsToDisplay() });
+  } catch (err) {
+    res.send({ success : false, message : err.message });
+  }
+});
+
+app.get('/admins/reviews', async (req, res) => {
+  try {
+    res.send({ success: true, data: await getUnreviewedProduct() });
+  } catch (err) {
+    res.send({ success: false, message: err.message});
   }
 });
 

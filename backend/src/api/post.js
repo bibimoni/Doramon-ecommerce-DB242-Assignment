@@ -12,6 +12,7 @@ import {
   updateVariation,
   updateCart,
   addAdmin,
+  reviewProduct,
 } from '../database.js';
 import { sha256 } from 'js-sha256';
 
@@ -244,6 +245,18 @@ app.post('/users/admins', async (req, res) => {
   password = sha256(password); // hash password
   try {
     res.send({ success: true, data : await addAdmin( {username, password, email, perm })})
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.post('/admins/review/:username', async (req, res) => {
+  const username = req.params.username;
+  const {
+    products
+  } = req.body;
+  try {
+    res.send({ success: true, data: await reviewProduct({ username, products }) });
   } catch (err) {
     res.send({ success: false, message: err.message });
   }

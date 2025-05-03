@@ -331,14 +331,14 @@ export async function getProductOrVariation({ product_id = null, variation_id = 
         WHERE p.product_id = ?
         `, [product_id]);
 
-      return rows[0];
+      return checkExists(rows[0]);
     } else if (variation_id !== null) {
       const [rows] = await pool.query(`
         SELECT * FROM Variation v
         WHERE v.variation_id = ?
         `, [variation_id]);
 
-      return rows[0];
+      return checkExists(rows[0]);
     }
 
     throw Error("Please provide either product_id or variation_id")
@@ -540,4 +540,45 @@ export async function getVariationsFromCart({ buyer_username }) {
   } catch (err) {
     throw err;
   }
+}
+
+export async function getAllProductsToDisplay() {
+  try {
+    const [[rows]] = await pool.query(`
+      CALL Proc_get_all_products()
+      `);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getUnreviewedProduct() {
+  try {
+    const [[rows]] = await pool.query(`
+      CALL Proc_tobe_reviewed_product()
+      `);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function reviewProduct({
+  username, 
+  products
+}) {
+  let data = [];
+  for (const product_id of products) {
+    try {
+      await pool.query(`
+        CALL Proc_review_product(?, ?)
+      `, [username, product_id]);
+
+      data.push(await getProductOrVariation({ product_id }));
+    } catch (err) {
+      throw err;
+    }
+  }
+  return data;
 }

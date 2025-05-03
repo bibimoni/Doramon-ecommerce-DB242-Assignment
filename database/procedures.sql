@@ -3,13 +3,14 @@ DROP PROCEDURE IF EXISTS Proc_Insert_person;
 DROP PROCEDURE IF EXISTS Proc_Insert_buyer;
 DROP PROCEDURE IF EXISTS Proc_Insert_seller;
 DROP PROCEDURE IF EXISTS Proc_Insert_admin;
-DROP PROCEDURE IF EXISTS Proc_Insert_product;
 DROP PROCEDURE IF EXISTS Proc_Sales_by_category;
 DROP PROCEDURE IF EXISTS Proc_Best_sale_from_date;
 DROP PROCEDURE IF EXISTS Proc_Unreviewed_product;
 DROP PROCEDURE IF EXISTS Proc_update_cart_variation;
 DROP PROCEDURE IF EXISTS Proc_get_variations_from_cart;
 DROP PROCEDURE IF EXISTS Proc_tobe_reviewed_product;
+DROP PROCEDURE IF EXISTS Proc_get_all_products;
+DROP PROCEDURE IF EXISTS Proc_review_product;
 
 DELIMITER //
 CREATE PROCEDURE Proc_Insert_person(
@@ -194,32 +195,6 @@ END //
 DELIMITER ;
 
 DELIMITER //
-# insert product must have atleast 1 variation
-CREATE PROCEDURE Proc_Insert_product(
-    IN in_name VARCHAR(20),
-    IN in_thumbnail TEXT,
-    IN in_info TEXT,
-    IN in_category VARCHAR(20),
-    IN in_bid INT,
-    IN in_admin VARCHAR(20)
-)
-BEGIN
-    IF NOT Func_Valid_name(in_name) THEN
-        SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Invalid product name';
-    END IF;
-
-    INSERT INTO Product(name, thumbnail, info, category, business_id, admin_usr)
-    VALUES (in_name,
-            in_thumbnail,
-            in_info,
-            in_category,
-            in_bid,
-            in_admin);
-END //
-DELIMITER ;
-
-DELIMITER //
 CREATE PROCEDURE Proc_Unreviewed_product()
 BEGIN
     SELECT *
@@ -290,9 +265,29 @@ DELIMITER //
 CREATE PROCEDURE Proc_tobe_reviewed_product()
 BEGIN
     SELECT *
-    FROM Product
+    FROM Product p
     WHERE admin_usr IS NULL
-      AND EXISTS (SELECT 1 FROM Variation WHERE Variation.product_id = Product.product_id);
+      AND EXISTS (
+        SELECT *
+        FROM Variation v
+        WHERE v.product_id = p.product_id);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE Proc_review_product(
+    IN in_username VARCHAR(20),
+    IN in_pid INT
+)
+BEGIN
+    IF Exists_Admin(in_username) THEN
+        UPDATE Product
+        SET admin_usr = in_username
+        WHERE product_id = in_pid;
+    ELSE
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'admin username doesn\'t exists';
+    END IF;
 END //
 DELIMITER ;
 
@@ -371,5 +366,30 @@ BEGIN
         SELECT c.cart_id FROM Cart c
                          WHERE buyer_usr = username
         );
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE Proc_get_all_products()
+BEGIN
+    SELECT
+        p.product_id,
+        p.name,
+        p.thumbnail,
+        p.info,
+        p.category,
+        p.business_id,
+        MIN(v.price) as min_price,
+        MAX(v.price) as max_price
+    FROM
+        Product AS p
+    JOIN Variation AS v ON v.product_id = p.product_id
+    WHERE
+        p.active = TRUE
+      AND v.active = TRUE
+      AND p.admin_usr IS NOT NULL
+    GROUP BY
+        p.product_id,
+        p.name;
 END //
 DELIMITER ;
