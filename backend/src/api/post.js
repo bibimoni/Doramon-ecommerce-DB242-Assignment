@@ -14,6 +14,8 @@ import {
   addAdmin,
   addVoucherBySeller,
   addVoucherByAdmin,
+  addCommentToProd,
+  getComments
 } from '../database.js';
 import { sha256 } from 'js-sha256';
 
@@ -360,5 +362,24 @@ app.post('/voucher/admins', async (req, res) => {
 
 });
 
+app.post('/comment/:product_id', async (req, res) => {
+  const {product_id} = req.params;
+  const { buyer_usr, seller_usr, comment, star, attachment } = req.body;
+
+  const result = await addCommentToProd({
+    product_id,
+    buyer_usr,
+    seller_usr,
+    comment,
+    star,
+    attachment
+  });
+
+  try {
+    res.send({success: true, data: result});
+  } catch (err) {
+    res.send({success: false, message: err.message});
+  }
+})
 export default app;
 

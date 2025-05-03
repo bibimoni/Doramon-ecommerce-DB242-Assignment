@@ -673,6 +673,43 @@ export async function getVouchers(){
   }
 }
 
+export async function addCommentToProd({
+  product_id,
+  buyer_usr,
+  seller_usr,
+  comment,
+  star,
+  attachment = null
+}) {
+  try {
+    const [results] = await pool.execute(
+      `INSERT INTO Comment (product_id, seller_usr, buyer_usr, comment, star, attachment)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [product_id, seller_usr, buyer_usr, comment, star, attachment]
+    );
+
+    return results;
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+export async function getComments({product_id}) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT * 
+      FROM Comment c
+      WHERE c.product_id = ?
+      `, [product_id]);
+      return checkExists(rows);
+  } catch (err) {
+    throw err;
+  }
+}
+
+
+
 
 
 

@@ -17,6 +17,7 @@ import {
   getAdmin,
   getShopVoucher,
   getVouchers,
+  getComments,
 } from '../database.js';
 import express from 'express';
 const app = express.Router();
@@ -210,6 +211,15 @@ app.get('/voucher', async (req, res) => {
     res.send({success: true, data: await getVouchers()});
   } catch(err) {
     res.send({success: true, message: err.message});
+  }
+});
+
+app.get('/comment/:product_id', async (req, res) => {
+  const product_id = req.params.product_id;
+  try {
+    res.send({success: true, data: await getComments({product_id}) });
+  } catch (err) {
+    res.send({success: false, message: err.message});
   }
 });
 
