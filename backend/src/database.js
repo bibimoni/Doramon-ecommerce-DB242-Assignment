@@ -4,7 +4,7 @@ import { checkExists } from './utils.js';
 
 const pool = mysql.createPool({
   connectionLimit: 10,
-  host: 'localhost',
+  host: '127.0.0.1',
   user: process.env.username,
   password: process.env.password,
   database: 'shopee'
@@ -31,7 +31,7 @@ export async function getBuyers() {
       SELECT * 
       FROM 
         Person p 
-      JOIN Buyer b ON p.username = b.username
+      JOIN buyer b ON p.username = b.username
       JOIN Cart c ON c.buyer_usr = b.username
       ORDER BY
         p.username
@@ -310,6 +310,7 @@ export async function getShopProducts({ business_id }) {
   }
 }
 
+
 export async function getProductVariations({ product_id }) {
   try {
     const [rows] = await pool.query(`
@@ -540,4 +541,63 @@ export async function getVariationsFromCart({ buyer_username }) {
   } catch (err) {
     throw err;
   }
+}
+
+export async function addVoucher({voucher_list = []}) {
+  const results = [];
+  for (const voucher of voucher_list) {
+    const {
+      voucher_id,
+      name,
+      expired_date,
+      seller_usr,
+      max_usage,
+      decrease_type,     
+      decrease_value,    
+      min_buy_value,     
+      max_decrease_value
+    } = voucher;
+
+    if (
+      !voucher_id || !name || !expired_date || !seller_usr || !max_usage || 
+      decrease_type == null || decrease_value == null || min_buy_value == null || max_decrease_value == null
+    ) {
+      throw new Error(`Not enough information for voucher: ${JSON.stringify(voucher)}`);
+    }
+
+    try {
+      const sql = `
+        INSERT INTO Voucher (voucher_id, name, expired_date, seller_usr, max_usage, decrease_type, decrease_value, min_buy_value, max_decrease_value)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+      const [result] = await pool.execute(sql, [
+        voucher_id,
+        name,
+        expired_date,
+        seller_usr,
+        max_usage,
+        decrease_type,
+        decrease_value,
+        min_buy_value,
+        max_decrease_value
+      ]);
+
+      results.push({
+        voucher_id,
+        name,
+        expired_date,
+        seller_usr,
+        max_usage,
+        decrease_type,
+        decrease_value,
+        min_buy_value,
+        max_decrease_value
+      });
+
+    } catch (err) {
+      throw new Error(`Error when add voucher ${voucher_id}: ${err.message}`);
+    }
+  }
+
+  return results;
 }
