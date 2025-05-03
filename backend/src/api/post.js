@@ -21,7 +21,7 @@ app.post('/users/edit/:username', async (req, res) => {
   const username = req.params.username;
   let {
     password, /* Must */
-    email, 
+    email,
     birth_day, /* YYYY-MM-DD */
     phone_number, /* 10-11 numbers */
     avatar_link,
@@ -33,7 +33,7 @@ app.post('/users/edit/:username', async (req, res) => {
       return;
     }
     password = sha256(password);
-    res.send({ success : true, data: await editUser({ username, password, email, birth_day, phone_number, avatar_link, gender })});
+    res.send({ success: true, data: await editUser({ username, password, email, birth_day, phone_number, avatar_link, gender }) });
   } catch (err) {
     res.send({ success: false, message: err.message });
   }
@@ -63,6 +63,7 @@ app.post('/users/sellers', async (req, res) => {
     username,
     password,
     email,
+    business_id,
     shopname,
     address,
     business_type,
@@ -75,6 +76,7 @@ app.post('/users/sellers', async (req, res) => {
       username,
       password,
       email,
+      business_id,
       shopname,
       address,
       business_type,
@@ -267,7 +269,7 @@ app.post('/users/admins', async (req, res) => {
   email ??= null;
   password = sha256(password); // hash password
   try {
-    res.send({ success: true, data : await addAdmin( {username, password, email, perm })})
+    res.send({ success: true, data: await addAdmin({ username, password, email, perm }) })
   } catch (err) {
     res.send({ success: false, message: err.message });
   }

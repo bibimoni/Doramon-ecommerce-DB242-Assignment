@@ -30,7 +30,7 @@ export async function editUser({
         gender = ?
       WHERE username = ?
       `, [password, email, birth_day, phone_number, avatar_link, gender, username]);
-    
+
     const [rows] = await pool.query(`
       SELECT * FROM Person
       WHERE username = ?
@@ -117,8 +117,8 @@ export async function getAdmins() {
       SELECT * FROM Person p
       JOIN Admin ad ON ad.username = p.username
       `);
-    
-      return rows;
+
+    return rows;
   } catch (err) {
     throw err;
   }
@@ -150,7 +150,7 @@ export async function addAdmin({
         ?, ?, ?, null, null, false, null, null, ?
       )
       `, [username, password, email, perm]);
-    
+
     return await getAdmin({ username });
   } catch (err) {
     throw err;
@@ -194,6 +194,7 @@ export async function addSeller({
   username,
   password,
   email,
+  business_id,
   shopname,
   address,
   business_type,
@@ -204,11 +205,12 @@ export async function addSeller({
     await pool.query(`
     CALL Proc_Insert_Seller(
       ?, ?, ?, null, null, false, null, null, 
-      ?, ?, ?, ?, ?
+      ?, ?, ?, ?, ?, ?
     )`, [
       username,
       password,
       email,
+      business_id,
       shopname,
       address,
       business_type,
@@ -596,7 +598,7 @@ export async function getUnreviewedProduct() {
 }
 
 export async function reviewProduct({
-  username, 
+  username,
   products
 }) {
   let data = [];

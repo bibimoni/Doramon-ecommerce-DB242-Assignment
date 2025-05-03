@@ -96,6 +96,13 @@ CREATE PROCEDURE Proc_Insert_buyer(
     IN in_coin INT
 )
 BEGIN
+    IF EXISTS (SELECT 1
+               FROM Buyer
+               WHERE in_username = username) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Username exists';
+    END IF;
+
     CALL Proc_Insert_person(
             in_username,
             hashed_password,
@@ -124,6 +131,7 @@ CREATE PROCEDURE Proc_Insert_seller(
     IN is_banned BOOL,
     IN avatar_link TEXT,
     IN gender ENUM ('m', 'f'),
+    IN in_business_id INT,
     IN in_shop_name VARCHAR(20),
     IN in_addr VARCHAR(20),
     IN in_btype ENUM ('personal', 'business', 'family'),
@@ -134,6 +142,13 @@ BEGIN
     IF NOT Func_Valid_name(in_shop_name) THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Shop name\'s is invalid';
+    END IF;
+
+    IF EXISTS (SELECT 1
+               FROM Seller
+               WHERE in_username = username) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Username exists';
     END IF;
 
     CALL Proc_Insert_person(
@@ -147,8 +162,10 @@ BEGIN
             gender
          );
 
-    INSERT INTO Shop (name, address, business_type, business_address, tax_number)
-    VALUES (in_shop_name,
+    INSERT INTO Shop (business_id ,name, address, business_type, business_address, tax_number)
+    VALUES (
+            in_business_id,
+            in_shop_name,
             in_addr,
             in_btype,
             in_baddr,
@@ -160,7 +177,7 @@ BEGIN
         Seller.username)
     VALUES (
 #             in_shop_name,
-             LAST_INSERT_ID()
+             in_business_id
            , in_username);
 END //
 DELIMITER ;
@@ -178,6 +195,13 @@ CREATE PROCEDURE Proc_Insert_admin(
     IN in_perm INT
 )
 BEGIN
+    IF EXISTS (SELECT 1
+               FROM Admin
+               WHERE in_username = username) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Username exists';
+    END IF;
+
     CALL Proc_Insert_person(
             in_username,
             hashed_password,

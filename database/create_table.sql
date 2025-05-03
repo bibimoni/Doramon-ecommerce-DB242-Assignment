@@ -100,7 +100,7 @@ CREATE TABLE Admin (
 );
 
 CREATE TABLE Shop (
-    business_id         INT AUTO_INCREMENT PRIMARY KEY,
+    business_id         INT UNIQUE PRIMARY KEY,
     name                VARCHAR(20) NOT NULL,
     address             VARCHAR(20) NOT NULL,
     join_time           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
