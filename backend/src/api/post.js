@@ -253,7 +253,7 @@ app.post('/users/admins', async (req, res) => {
 });
 
 
-app.post('/users/sellers/voucher', async (req, res) => {
+app.post('voucher/sellers', async (req, res) => {
   const { voucher_list } = req.body;
 
   if (!Array.isArray(voucher_list) || voucher_list.length === 0) {
@@ -307,7 +307,7 @@ app.post('/users/sellers/voucher', async (req, res) => {
   //res.send({ success: true, data: results });
 });
 
-app.post('/users/admins/voucher', async (req, res) => {
+app.post('voucher/admins', async (req, res) => {
   const { voucher_list } = req.body;
 
   if (!Array.isArray(voucher_list) || voucher_list.length === 0) {
