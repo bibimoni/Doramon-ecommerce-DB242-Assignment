@@ -1,16 +1,28 @@
-export async function getBuyer({ username }) {
+export async function removeComment({buyer_usr, product_id, comment_id}) {
   try {
+    // Kiểm tra xem comment có tồn tại và người mua
+    // có đúng là người đã đăng comment này hay không 
     const [rows] = await pool.query(`
-      SELECT * 
-      FROM 
-        Person p
-      JOIN Buyer b ON p.username = b.username
-      JOIN Cart c ON c.buyer_usr = b.username
-      WHERE
-        p.username = ?
-      `, [username]);
-    return checkExists(rows[0]);
+      SELECT buyer_usr, comment_id, comment
+      FROM Comment c
+      WHERE c.product_id = ?
+      AND c.comment_id = ?
+      `, [product_id, comment_id]);
+      if (rows.length === 0) throw new Error('Comment not found');
+    
+    const commentBuyer = rows[0].buyer_usr;
+    if (commentBuyer !== buyer_usr) {
+      throw new Error('You are not authorized to delete this comment');
+    }
+
+    await pool.query(`
+      DELETE FROM Comment
+      WHERE product_id = ?
+      AND comment_id = ?
+      `, [product_id, comment_id]);
+
+      return checkExists(rows);
   } catch (err) {
     throw err;
   }
-}
+};

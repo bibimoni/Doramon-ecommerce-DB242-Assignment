@@ -808,5 +808,45 @@ export async function getOrders({buyer_usr}) {
   } catch (err) {
     throw err;
   }
+};
+
+export async function cancelOrder({buyer_usr, order_id}) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT state_type, buyer_usr
+      FROM \`Order\`o
+      WHERE o.buyer_usr = ?
+      AND o.order_id = ?
+      `, [buyer_usr, order_id]);
+
+      if (rows.length == 0) {
+        throw new Error('Order not found');
+      }
+
+      const order = rows[0];
+      if (buyer_usr != order.buyer_usr) {
+        throw new Error('No authentication to cancel this order');
+      }
+
+      if (order.state_type != 'accepted' || order.state_type != 'waiting') {
+        throw new Error('TO Front end: do not display this button');
+      }
+
+      await pool.query(`
+        UPDATE \`Order\`
+        SET state_type = 'cancelled', state_desc = 'Backend: Cancelled by buyer'
+        WHERE order_id = ?
+        `, [order_id]);
+        const [rows_after_cancel] = await pool.query(`
+          SELECT order_id, buyer_usr, state_type 
+          FROM \`Order\`o
+          WHERE o.buyer_usr = ?
+          AND o.order_id = ?
+          `, [buyer_usr, order_id]);
+
+      return checkExists(rows_after_cancel);
+  } catch (err) {
+    throw err;
+  }
 }
 

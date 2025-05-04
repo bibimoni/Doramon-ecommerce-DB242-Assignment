@@ -17,7 +17,8 @@ import {
   addCommentToProd,
   responseComment,
   removeComment,
-  addOrder
+  addOrder,
+  cancelOrder
 } from '../database.js';
 import { sha256 } from 'js-sha256';
 
@@ -405,7 +406,7 @@ app.post('/comment/:product_id/:comment_id/remove', async (req, res) => {
   }
 });
 
-app.post('/order', async (req, res) => {
+app.post('/orders', async (req, res) => {
   const { buyer_usr,
     shop_addr,
     delivery_addr,
@@ -436,7 +437,7 @@ app.post('/order', async (req, res) => {
       transfer_fee,
       discount,
       estimate_time };
-      
+
     //res.send({success: true, data: ret});
     res.json({
       success: true,
@@ -450,6 +451,14 @@ app.post('/order', async (req, res) => {
   }
 });
 
+app.post('/buyers/orders/cancel', async (req, res) => {
+  const { buyer_usr, order_id} = req.body;
+  try {
+    res.send({success: true, data: await cancelOrder({buyer_usr, order_id}) });
+  } catch (err) {
+    res.send({success: false, message: err.message});
+  }
+})
 
 export default app;
 
