@@ -96,4 +96,46 @@ SELECT *
 FROM Person p
          JOIN Seller s ON s.username = p.username
          JOIN Shop sh ON sh.business_id = s.business_id
-ORDER BY p.username
+ORDER BY p.username;
+
+CALL Proc_Insert_person(
+    'johnDoe123',
+    'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', -- SHA-256 of "password123"
+    'john@example.com',
+    '1990-05-20',
+    '0123456789',
+    FALSE,
+    'https://example.com/avatar/john.png',
+    'm'
+);
+
+SELECT * FROM Person p WHERE username = 'johnDoe123';
+
+CALL Proc_Insert_admin(
+    'adminUser1',
+    'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f',  -- password123
+    'admin1@example.com',
+    '1985-04-10',
+    '0987654321',
+    FALSE,
+    'https://example.com/avatar/admin1.png',
+    'm',
+    1  -- permission level
+);
+
+CALL Proc_Insert_admin(
+    'adminJane',
+    'bcb4efbddba33d2522fbb18aa50d050a0d7eb4193e3462bc6c3db551b96f61ef',  -- securepass
+    NULL,
+    '1992-03-21',
+    NULL,
+    FALSE,
+    NULL,
+    'f',
+    2
+);
+
+  SELECT * FROM Person p
+  JOIN Admin ad ON ad.username = p.username
+  WHERE
+    p.username = 'adminJane'
