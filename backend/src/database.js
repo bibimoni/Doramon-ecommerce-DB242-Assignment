@@ -773,7 +773,9 @@ export async function addOrder({
   payment_method,    
   transfer_fee,       
   discount,         
-  estimate_time      
+  estimate_time,
+  delivery_id = null,   // Có thể truyền null nếu chưa có
+  carrier_id = null     // Có thể truyền null nếu chưa có
 }) {
   try {
     const [rows] = await pool.query(`
@@ -785,17 +787,32 @@ export async function addOrder({
         state_desc,
         payment_method,
         buyer_usr,
+        delivery_id,
+        carrier_id,
         transfer_fee,
         discount,
         estimate_time
       )
-      VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [shop_addr, delivery_addr, state_type, state_desc, payment_method, buyer_usr, transfer_fee, discount, estimate_time]);
+      VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      shop_addr,
+      delivery_addr,
+      state_type,
+      state_desc,
+      payment_method,
+      buyer_usr,
+      delivery_id,
+      carrier_id,
+      transfer_fee,
+      discount,
+      estimate_time
+    ]);
+
     return checkExists(rows);
   } catch (err) {
     throw err;
   }
-};
+}
 
 export async function getOrders({buyer_usr}) {
   try {
@@ -850,3 +867,4 @@ export async function cancelOrder({buyer_usr, order_id}) {
   }
 }
 
+//export async function addDelivery({})

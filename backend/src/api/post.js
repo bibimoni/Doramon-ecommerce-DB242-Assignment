@@ -407,7 +407,8 @@ app.post('/comment/:product_id/:comment_id/remove', async (req, res) => {
 });
 
 app.post('/orders', async (req, res) => {
-  const { buyer_usr,
+  const {
+    buyer_usr,
     shop_addr,
     delivery_addr,
     state_type,
@@ -415,7 +416,11 @@ app.post('/orders', async (req, res) => {
     payment_method,
     transfer_fee,
     discount,
-    estimate_time } = req.body;
+    estimate_time,
+    delivery_id = null, // mặc định null nếu không truyền
+    carrier_id = null   // mặc định null nếu không truyền
+  } = req.body;
+
   try {
     const ret = await addOrder({
       buyer_usr,
@@ -426,9 +431,13 @@ app.post('/orders', async (req, res) => {
       payment_method,
       transfer_fee,
       discount,
-      estimate_time
+      estimate_time,
+      delivery_id,
+      carrier_id
     });
-    const orderData = { buyer_usr,
+
+    const orderData = {
+      buyer_usr,
       shop_addr,
       delivery_addr,
       state_type,
@@ -436,9 +445,11 @@ app.post('/orders', async (req, res) => {
       payment_method,
       transfer_fee,
       discount,
-      estimate_time };
+      estimate_time,
+      delivery_id,
+      carrier_id
+    };
 
-    //res.send({success: true, data: ret});
     res.json({
       success: true,
       data: {
@@ -447,9 +458,10 @@ app.post('/orders', async (req, res) => {
       }
     });
   } catch (err) {
-    res.send({success: false, message: err.message});
+    res.send({ success: false, message: err.message });
   }
 });
+
 
 app.post('/buyers/orders/cancel', async (req, res) => {
   const { buyer_usr, order_id} = req.body;
