@@ -89,7 +89,7 @@ CREATE TABLE Buyer (
 );
 
 CREATE TABLE Seller (
- 	shop_name			VARCHAR(20) NOT NULL,
+#  	shop_name			VARCHAR(20) NOT NULL,
 	business_id 	    INT NOT NULL UNIQUE,
     username            VARCHAR(20) PRIMARY KEY
 );
@@ -182,7 +182,8 @@ CREATE TABLE `Order` (
     carrier_id          INT, # ma van don co the la null, chi khi dang van chuyen moi co
     estimate_time       DATETIME, # co the khong estimate duoc ?
     transfer_fee        INT NOT NULL,
-    discount            INT NOT NULL # chiet khau cua san
+    discount            INT NOT NULL, # chiet khau cua san
+    final_price         INT DEFAULT 0 NOT NULL
 );
 
 CREATE TABLE Delivery (

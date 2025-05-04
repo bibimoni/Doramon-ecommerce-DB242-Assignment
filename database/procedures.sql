@@ -119,6 +119,8 @@ BEGIN
     END IF;
     INSERT INTO Buyer (coin, username)
     VALUES (in_coin, in_username);
+    INSERT INTO Cart(buyer_usr)
+    VALUES (in_username);
 END //
 DELIMITER ;
 
@@ -173,7 +175,6 @@ BEGIN
             in_tax);
 
     INSERT INTO Seller (
-#                         Seller.shop_name,
         Seller.business_id,
         Seller.username)
     VALUES (

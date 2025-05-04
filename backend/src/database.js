@@ -99,12 +99,12 @@ export async function addBuyer({ username, password, email }) {
         ?,
         null, null, false, null, null, null
       )`, [username, password, email]);
-
-    await pool.query(`
-      INSERT INTO Cart(buyer_usr) 
-      VALUES (?)  
-      `, [username]);
-
+    //
+    // await pool.query(`
+    //   INSERT INTO Cart(buyer_usr) 
+    //   VALUES (?)  
+    //   `, [username]);
+    //
     return await getBuyer({ username });
   } catch (err) {
     throw err;
@@ -616,7 +616,7 @@ export async function reviewProduct({
   }
   return data;
 }
-export async function addVoucherBySeller({voucher_list = []}) {
+export async function addVoucherBySeller({ voucher_list = [] }) {
   const results = [];
   for (const voucher of voucher_list) {
     const {
@@ -624,13 +624,13 @@ export async function addVoucherBySeller({voucher_list = []}) {
       expired_date,
       seller_usr,
       max_usage,
-      decrease_type,     
-      decrease_value,    
-      min_buy_value,     
+      decrease_type,
+      decrease_value,
+      min_buy_value,
       max_decrease_value
     } = voucher;
 
-    if (!name || !expired_date || !seller_usr || !max_usage || 
+    if (!name || !expired_date || !seller_usr || !max_usage ||
       decrease_type == null || decrease_value == null || min_buy_value == null || max_decrease_value == null
     ) {
       throw new Error(`Not enough information for voucher: ${JSON.stringify(voucher)}`);
@@ -671,7 +671,7 @@ export async function addVoucherBySeller({voucher_list = []}) {
   return results;
 }
 
-export async function getShopVoucher({seller_usr}) {
+export async function getShopVoucher({ seller_usr }) {
   try {
     const [results] = await pool.query(`
       SELECT *
@@ -679,27 +679,27 @@ export async function getShopVoucher({seller_usr}) {
       Voucher v 
       WHERE v.seller_usr = ?
       `, [seller_usr]);
-      return checkExists(results);
+    return checkExists(results);
   }
   catch (err) {
     throw err;
   }
 }
 
-export async function addVoucherByAdmin({voucher_list = []}) {
+export async function addVoucherByAdmin({ voucher_list = [] }) {
   const results = [];
   for (const voucher of voucher_list) {
     const {
       name,
       expired_date,
       max_usage,
-      decrease_type,     
-      decrease_value,    
-      min_buy_value,     
+      decrease_type,
+      decrease_value,
+      min_buy_value,
       max_decrease_value
     } = voucher;
 
-    if (!name || !expired_date || !max_usage || 
+    if (!name || !expired_date || !max_usage ||
       decrease_type == null || decrease_value == null || min_buy_value == null || max_decrease_value == null
     ) {
       throw new Error(`Not enough information for voucher: ${JSON.stringify(voucher)}`);
@@ -735,18 +735,18 @@ export async function addVoucherByAdmin({voucher_list = []}) {
     }
   }
 
-  
+
   return results;
 }
 
-export async function getVouchers(){
+export async function getVouchers() {
   try {
     const [rows] = await pool.query(`
       SELECT *
       FROM 
       Voucher
       `);
-      return rows;
+    return rows;
   } catch (err) {
     throw err;
   }
