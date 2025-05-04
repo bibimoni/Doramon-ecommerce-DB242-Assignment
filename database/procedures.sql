@@ -257,8 +257,6 @@ BEGIN
                                     WHERE p.product_id = in_bid
                                       AND o.placed_date >= in_from
                                       AND o.state_type = 'finished') as sub);
-
-
 END //
 DELIMITER ;
 
