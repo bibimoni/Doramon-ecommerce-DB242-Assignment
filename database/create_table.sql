@@ -89,7 +89,7 @@ CREATE TABLE Buyer (
 );
 
 CREATE TABLE Seller (
-# 	shop_name			VARCHAR(20) NOT NULL,
+ 	shop_name			VARCHAR(20) NOT NULL,
 	business_id 	    INT NOT NULL UNIQUE,
     username            VARCHAR(20) PRIMARY KEY
 );

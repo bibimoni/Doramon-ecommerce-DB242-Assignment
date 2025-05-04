@@ -17,6 +17,8 @@ import {
   getAdmin,
   getAllProductsToDisplay,
   getUnreviewedProduct,
+  getShopVoucher,
+  getVouchers,
 } from '../database.js';
 import express from 'express';
 const app = express.Router();
@@ -203,6 +205,26 @@ app.get('/admins/reviews', async (req, res) => {
     res.send({ success: true, data: await getUnreviewedProduct() });
   } catch (err) {
     res.send({ success: false, message: err.message});
+
+// Method for buyer to get voucher 
+
+/*From a specific shop */
+app.get('/voucher/:seller_usr', async (req, res) => {
+  const seller_usr = req.params.seller_usr;
+  try {
+    res.send({success: true, data: await getShopVoucher({ seller_usr }) });
+  } catch (err) {
+    res.send({success: false, message: err.message});
+  }
+});
+
+/*From main page or in Voucher site */
+app.get('/voucher', async (req, res) => {
+  const seller_usr = req.params.voucher;
+  try {
+    res.send({success: true, data: await getVouchers()});
+  } catch(err) {
+    res.send({success: true, message: err.message});
   }
 });
 
