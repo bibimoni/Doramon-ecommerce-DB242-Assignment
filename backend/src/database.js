@@ -570,7 +570,12 @@ export async function getVariationsFromCart({ buyer_username }) {
     const [[rows]] = await pool.query(`
       CALL Proc_get_variations_from_cart(?)
       `, [buyer_username]);
-    return rows;
+    const [[final_price]] = await pool.query(`
+      SELECT final_price
+      FROM Cart c
+      WHERE c.buyer_usr = ?
+      `, [buyer_username]);
+    return { variations: rows, final_price: final_price };
   } catch (err) {
     throw err;
   }
