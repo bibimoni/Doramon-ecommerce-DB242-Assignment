@@ -136,9 +136,9 @@ CREATE PROCEDURE Proc_Insert_seller(
     IN gender ENUM ('m', 'f'),
     IN in_business_id INT,
     IN in_shop_name VARCHAR(20),
-    IN in_addr VARCHAR(20),
+    IN in_addr VARCHAR(100),
     IN in_btype ENUM ('personal', 'business', 'family'),
-    IN in_baddr VARCHAR(20),
+    IN in_baddr VARCHAR(100),
     IN in_tax INT
 )
 BEGIN
