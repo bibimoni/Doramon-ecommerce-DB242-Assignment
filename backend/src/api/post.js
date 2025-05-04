@@ -290,8 +290,6 @@ app.post('/admins/review/:username', async (req, res) => {
   }
 });
 
-export default app;
-
 app.post('/users/sellers/voucher', async (req, res) => {
   const { voucher_list } = req.body;
 
@@ -307,9 +305,9 @@ app.post('/users/sellers/voucher', async (req, res) => {
       expired_date,
       seller_usr,
       max_usage,
-      decrease_type,     
-      decrease_value,    
-      min_buy_value,     
+      decrease_type,
+      decrease_value,
+      min_buy_value,
       max_decrease_value
     } = voucher;
 
@@ -368,9 +366,9 @@ app.post('/users/admins/voucher', async (req, res) => {
       name,
       expired_date,
       max_usage,
-      decrease_type,     
-      decrease_value,    
-      min_buy_value,     
+      decrease_type,
+      decrease_value,
+      min_buy_value,
       max_decrease_value
     } = voucher;
 

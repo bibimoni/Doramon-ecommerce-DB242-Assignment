@@ -194,9 +194,9 @@ app.get('/users/admins/:username', async (req, res) => {
 
 app.get('/all/products/', async (req, res) => {
   try {
-    res.send({ success : true, data : await getAllProductsToDisplay() });
+    res.send({ success: true, data: await getAllProductsToDisplay() });
   } catch (err) {
-    res.send({ success : false, message : err.message });
+    res.send({ success: false, message: err.message });
   }
 });
 
@@ -204,17 +204,19 @@ app.get('/admins/reviews', async (req, res) => {
   try {
     res.send({ success: true, data: await getUnreviewedProduct() });
   } catch (err) {
-    res.send({ success: false, message: err.message});
+    res.send({ success: false, message: err.message });
 
-// Method for buyer to get voucher 
+    // Method for buyer to get voucher 
 
-/*From a specific shop */
-app.get('/voucher/:seller_usr', async (req, res) => {
-  const seller_usr = req.params.seller_usr;
-  try {
-    res.send({success: true, data: await getShopVoucher({ seller_usr }) });
-  } catch (err) {
-    res.send({success: false, message: err.message});
+    /*From a specific shop */
+    app.get('/voucher/:seller_usr', async (req, res) => {
+      const seller_usr = req.params.seller_usr;
+      try {
+        res.send({ success: true, data: await getShopVoucher({ seller_usr }) });
+      } catch (err) {
+        res.send({ success: false, message: err.message });
+      }
+    });
   }
 });
 
@@ -222,9 +224,9 @@ app.get('/voucher/:seller_usr', async (req, res) => {
 app.get('/voucher', async (req, res) => {
   const seller_usr = req.params.voucher;
   try {
-    res.send({success: true, data: await getVouchers()});
-  } catch(err) {
-    res.send({success: true, message: err.message});
+    res.send({ success: true, data: await getVouchers() });
+  } catch (err) {
+    res.send({ success: true, message: err.message });
   }
 });
 

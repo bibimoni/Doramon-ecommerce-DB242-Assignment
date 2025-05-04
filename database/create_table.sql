@@ -54,7 +54,7 @@ CREATE TABLE Person (
 );
 
 CREATE TABLE Address (
-	address 			VARCHAR(20) NOT NULL,
+	address 			VARCHAR(100) NOT NULL,
     username            VARCHAR(20),
     PRIMARY KEY (username, address)
 );
@@ -102,7 +102,7 @@ CREATE TABLE Admin (
 CREATE TABLE Shop (
     business_id         INT UNIQUE PRIMARY KEY,
     name                VARCHAR(20) NOT NULL,
-    address             VARCHAR(20) NOT NULL,
+    address             VARCHAR(100) NOT NULL,
     join_time           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     business_type       ENUM('personal', 'business', 'family') NOT NULL,
     business_address    VARCHAR(20) NOT NULL,
@@ -173,8 +173,8 @@ CREATE TABLE `Order` (
     order_id            INT AUTO_INCREMENT PRIMARY KEY,
     placed_date         DATETIME NOT NULL,
     shop_addr           VARCHAR(20), # dia chi lay hang
-    delivery_addr       VARCHAR(20) NOT NULL,
-    state_type          ENUM('accepted', 'transport', 'wait for delivery', 'finished', 'cancelled') NOT NULL,
+    delivery_addr       VARCHAR(100) NOT NULL,
+    state_type          ENUM('waiting', 'accepted', 'transport', 'wait for delivery', 'finished', 'cancelled') NOT NULL,
     state_desc          TEXT,
     payment_method      ENUM('card', 'cash') NOT NULL, # hoac co the de la VARCHAR(20)
     buyer_usr           VARCHAR(20),
