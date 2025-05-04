@@ -64,5 +64,4 @@ BEGIN
 
     RETURN totalDiscount;
 END //
-
 DELIMITER ;
