@@ -15,7 +15,9 @@ import {
   addVoucherBySeller,
   addVoucherByAdmin,
   addCommentToProd,
-  responseComment
+  responseComment,
+  removeComment,
+  addOrder
 } from '../database.js';
 import { sha256 } from 'js-sha256';
 
@@ -248,7 +250,7 @@ app.post('/users/admins', async (req, res) => {
   email ??= null;
   password = sha256(password); // hash password
   try {
-    res.send({ success: true, data : await addAdmin( {username, password, email, perm })})
+    res.send({ success: true, data: await addAdmin({ username, password, email, perm }) })
   } catch (err) {
     res.send({ success: false, message: err.message });
   }
@@ -270,9 +272,9 @@ app.post('/voucher/sellers', async (req, res) => {
       expired_date,
       seller_usr,
       max_usage,
-      decrease_type,     
-      decrease_value,    
-      min_buy_value,     
+      decrease_type,
+      decrease_value,
+      min_buy_value,
       max_decrease_value
     } = voucher;
 
@@ -301,9 +303,9 @@ app.post('/voucher/sellers', async (req, res) => {
           max_decrease_value
         }]
       });
-      results.push({success: true, data: result});
+      results.push({ success: true, data: result });
     } catch (err) {
-      res.send({success: false, message: err.message});
+      res.send({ success: false, message: err.message });
     }
   }
   res.send({ success: true, data: results });
@@ -323,9 +325,9 @@ app.post('/voucher/admins', async (req, res) => {
       name,
       expired_date,
       max_usage,
-      decrease_type,     
-      decrease_value,    
-      min_buy_value,     
+      decrease_type,
+      decrease_value,
+      min_buy_value,
       max_decrease_value
     } = voucher;
 
@@ -353,9 +355,9 @@ app.post('/voucher/admins', async (req, res) => {
           max_decrease_value
         }]
       });
-      results.push({success: true, data: result});
+      results.push({ success: true, data: result });
     } catch (err) {
-      res.send({success: false, message: err.message});
+      res.send({ success: false, message: err.message });
     }
   }
   res.send({ success: true, data: results });
@@ -363,7 +365,7 @@ app.post('/voucher/admins', async (req, res) => {
 });
 
 app.post('/comment/:product_id', async (req, res) => {
-  const {product_id} = req.params;
+  const { product_id } = req.params;
   const { buyer_usr, seller_usr, comment, star, attachment } = req.body;
 
   const result = await addCommentToProd({
@@ -376,21 +378,78 @@ app.post('/comment/:product_id', async (req, res) => {
   });
 
   try {
-    res.send({success: true, data: result});
+    res.send({ success: true, data: result });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.post('/comment/:product_id/:comment_id/response', async (req, res) => {
+  const { comment_id } = req.params;
+  const { seller_usr, response } = req.body;
+  try {
+    res.send({ success: true, data: await responseComment({ comment_id, seller_usr, response }) });
+  }
+  catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.post('/comment/:product_id/:comment_id/remove', async (req, res) => {
+  const { buyer_usr } = req.body;
+  const { product_id, comment_id } = req.params;
+  try {
+    res.send({ success: true, data: await removeComment({ buyer_usr, product_id, comment_id }) });
+  } catch (err) {
+    res.send({ success: false, message: err.message });
+  }
+});
+
+app.post('/order', async (req, res) => {
+  const { buyer_usr,
+    shop_addr,
+    delivery_addr,
+    state_type,
+    state_desc,
+    payment_method,
+    transfer_fee,
+    discount,
+    estimate_time } = req.body;
+  try {
+    const ret = await addOrder({
+      buyer_usr,
+      shop_addr,
+      delivery_addr,
+      state_type,
+      state_desc,
+      payment_method,
+      transfer_fee,
+      discount,
+      estimate_time
+    });
+    const orderData = { buyer_usr,
+      shop_addr,
+      delivery_addr,
+      state_type,
+      state_desc,
+      payment_method,
+      transfer_fee,
+      discount,
+      estimate_time };
+      
+    //res.send({success: true, data: ret});
+    res.json({
+      success: true,
+      data: {
+        orderData,
+        order_id: ret.insertId
+      }
+    });
   } catch (err) {
     res.send({success: false, message: err.message});
   }
 });
 
-app.post('/comment/:comment_id/response', async (req, res) => {
-  const {comment_id} = req.params;
-  const {seller_usr, response} = req.body;
-  try {
-    res.send({success: true, data: await responseComment({comment_id, seller_usr, response}) });
-  }
-  catch (err) {
-    res.send({success: false, message: err.message});
-  }
-});
+
 export default app;
 

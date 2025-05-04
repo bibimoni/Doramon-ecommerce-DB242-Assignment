@@ -695,6 +695,35 @@ export async function addCommentToProd({
   }
 }
 
+export async function removeComment({buyer_usr, product_id, comment_id}) {
+  try {
+    // Kiểm tra xem comment có tồn tại và người mua
+    // có đúng là người đã đăng comment này hay không 
+    const [rows] = await pool.query(`
+      SELECT buyer_usr, comment_id, comment
+      FROM Comment c
+      WHERE c.product_id = ?
+      AND c.comment_id = ?
+      `, [product_id, comment_id]);
+      if (rows.length === 0) throw new Error('Comment not found');
+    
+    const commentBuyer = rows[0].buyer_usr;
+    if (commentBuyer !== buyer_usr) {
+      throw new Error('You are not authorized to delete this comment');
+    }
+
+    await pool.query(`
+      DELETE FROM Comment
+      WHERE product_id = ?
+      AND comment_id = ?
+      `, [product_id, comment_id]);
+
+      return checkExists(rows);
+  } catch (err) {
+    throw err;
+  }
+};
+
 export async function getComments({product_id}) {
   try {
     const [rows] = await pool.query(`
@@ -729,17 +758,55 @@ export async function responseComment({comment_id, seller_usr, response}) {
         SET response = ? 
         WHERE comment_id = ?
       `, [response, comment_id]);
-      return rows;
+      return checkExists(rows);
+  } catch (err) {
+    throw err;
+  }
+};
+
+export async function addOrder({
+  buyer_usr,          
+  shop_addr,        
+  delivery_addr,     
+  state_type,        
+  state_desc,       
+  payment_method,    
+  transfer_fee,       
+  discount,         
+  estimate_time      
+}) {
+  try {
+    const [rows] = await pool.query(`
+      INSERT INTO \`Order\` (
+        placed_date,
+        shop_addr,
+        delivery_addr,
+        state_type,
+        state_desc,
+        payment_method,
+        buyer_usr,
+        transfer_fee,
+        discount,
+        estimate_time
+      )
+      VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [shop_addr, delivery_addr, state_type, state_desc, payment_method, buyer_usr, transfer_fee, discount, estimate_time]);
+    return checkExists(rows);
+  } catch (err) {
+    throw err;
+  }
+};
+
+export async function getOrders({buyer_usr}) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT * 
+      FROM \`Order\` o
+      WHERE o.buyer_usr = ?
+      `, [buyer_usr]);
+      return checkExists(rows);
   } catch (err) {
     throw err;
   }
 }
-
-
-
-
-
-
-
-
 

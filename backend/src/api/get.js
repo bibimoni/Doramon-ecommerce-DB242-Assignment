@@ -18,6 +18,7 @@ import {
   getShopVoucher,
   getVouchers,
   getComments,
+  getOrders
 } from '../database.js';
 import express from 'express';
 const app = express.Router();
@@ -223,6 +224,13 @@ app.get('/comment/:product_id', async (req, res) => {
   }
 });
 
-
+app.get('/order/:buyer_usr', async (req, res) => {
+  const {buyer_usr} = req.params;
+  try {
+    res.send({success: true, data: await getOrders({buyer_usr}) });
+  } catch (err) {
+    res.send({success: false, message: err.message});
+  }
+})
 
 export default app;
