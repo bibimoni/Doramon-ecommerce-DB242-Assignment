@@ -173,66 +173,66 @@ SELECT * FROM Transaction;
 SELECT * FROM Voucher;
 SELECT * FROM Voucher_category;
 SELECT * FROM Apply_voucher;
-
-INSERT INTO Address (username, address) VALUES
-  ('johnDoe123', '101 Nguyen Trai, Hanoi'),
-  ('johnDoe123', '12 Tran Phu, Hanoi'),
-
-  ('janeDoe',     '200 Hai Ba Trung, HCMC'),
-  ('janeDoe',     '45 Le Loi, HCMC'),
-
-  ('user99',      '23 Xuan Thuy, Hanoi'),
-
-  ('buyerX',      '11 Ton Duc Thang, Hue');
-
--- Banking accounts
-INSERT INTO Banking_account (username, bank_name, bank_number, bank_type) VALUES
-  ('johnDoe123', 'Vietcombank',   '9704361234567890', 'debit'),
-  ('janeDoe',    'Techcombank',   '9704129876543210', 'credit'),
-  ('user99',     'MB Bank',       '9704012345678901', 'debit'),
-  ('buyerX',     'ACB',           '9704234567890123', 'debit');
-
--- Social links
-INSERT INTO Social (username, link) VALUES
-  ('johnDoe123', 'https://facebook.com/john.doe123'),
-  ('janeDoe',    'https://instagram.com/jane.doe'),
-  ('user99',     'https://twitter.com/user99'),
-  ('buyerX',     'https://tiktok.com/@buyerX');
-
-INSERT INTO Voucher
-  (name, expired_date, max_usage, decrease_type, decrease_value, min_buy_value, max_decrease_value, seller_usr, admin_usr)
-VALUES
-  ('PLAT10OFF',   '2025-12-31 23:59:59', 10000, '%',   10, 200000, 50000, NULL,      'adminJane'),
-  ('PLAT20OFF',   '2025-10-31 23:59:59',  5000, '%',   20, 300000, 80000, NULL,      'adminUser1'),
-  ('PLAT50K',     '2025-11-30 23:59:59',  8000, 'value',50000,100000, 50000, NULL,   'adminUser1');
-
-INSERT INTO Voucher
-  (name, expired_date, max_usage, decrease_type, decrease_value, min_buy_value, max_decrease_value, seller_usr)
-VALUES
-  ('TECH100K',    '2025-11-30 23:59:59',  1000, 'value',100000,500000,100000,'seller1'),
-  ('FASHION50',   '2025-09-30 23:59:59',  1500, 'value',50000, 200000, 50000, 'seller2'),
-  ('HOME5PCT',    '2025-10-15 23:59:59',  1200, '%',    5,   100000, 30000, 'seller3'),
-  ('BOOK25PCT',   '2025-12-31 23:59:59',  2000, '%',   25,   150000, 60000, 'seller4'),
-  ('PET30OFF',    '2025-08-31 23:59:59',  500,  'value',30000,100000,30000, 'seller5');
-
-INSERT INTO Voucher_category (category, voucher_id) VALUES
-  ('platform',  '1'),
-  ('platform',  '2'),
-  ('platform',  '3'),
-  ('electronics','4'),
-  ('fashion',   '5'),
-  ('home',      '6'),
-  ('books',     '7'),
-  ('pets',      '8');
-
-INSERT INTO Apply_voucher (voucher_id, order_id) VALUES
-  -- Order 1 (johnDoe123)
-  (1, 1),
-  -- Order 2 (janeDoe)
-  (5, 2),
-  -- Order 3 (buyerX)
-  (8, 3),
-  -- Order 4 (user99)
-  (3, 4),
-  -- Order 5 (buyerX)
-  (6, 5);
+#
+# INSERT INTO Address (username, address) VALUES
+#   ('johnDoe123', '101 Nguyen Trai, Hanoi'),
+#   ('johnDoe123', '12 Tran Phu, Hanoi'),
+#
+#   ('janeDoe',     '200 Hai Ba Trung, HCMC'),
+#   ('janeDoe',     '45 Le Loi, HCMC'),
+#
+#   ('user99',      '23 Xuan Thuy, Hanoi'),
+#
+#   ('buyerX',      '11 Ton Duc Thang, Hue');
+#
+# -- Banking accounts
+# INSERT INTO Banking_account (username, bank_name, bank_number, bank_type) VALUES
+#   ('johnDoe123', 'Vietcombank',   '9704361234567890', 'debit'),
+#   ('janeDoe',    'Techcombank',   '9704129876543210', 'credit'),
+#   ('user99',     'MB Bank',       '9704012345678901', 'debit'),
+#   ('buyerX',     'ACB',           '9704234567890123', 'debit');
+#
+# -- Social links
+# INSERT INTO Social (username, link) VALUES
+#   ('johnDoe123', 'https://facebook.com/john.doe123'),
+#   ('janeDoe',    'https://instagram.com/jane.doe'),
+#   ('user99',     'https://twitter.com/user99'),
+#   ('buyerX',     'https://tiktok.com/@buyerX');
+#
+# INSERT INTO Voucher
+#   (name, expired_date, max_usage, decrease_type, decrease_value, min_buy_value, max_decrease_value, seller_usr, admin_usr)
+# VALUES
+#   ('PLAT10OFF',   '2025-12-31 23:59:59', 10000, '%',   10, 200000, 50000, NULL,      'adminJane'),
+#   ('PLAT20OFF',   '2025-10-31 23:59:59',  5000, '%',   20, 300000, 80000, NULL,      'adminUser1'),
+#   ('PLAT50K',     '2025-11-30 23:59:59',  8000, 'value',50000,100000, 50000, NULL,   'adminUser1');
+#
+# INSERT INTO Voucher
+#   (name, expired_date, max_usage, decrease_type, decrease_value, min_buy_value, max_decrease_value, seller_usr)
+# VALUES
+#   ('TECH100K',    '2025-11-30 23:59:59',  1000, 'value',100000,500000,100000,'seller1'),
+#   ('FASHION50',   '2025-09-30 23:59:59',  1500, 'value',50000, 200000, 50000, 'seller2'),
+#   ('HOME5PCT',    '2025-10-15 23:59:59',  1200, '%',    5,   100000, 30000, 'seller3'),
+#   ('BOOK25PCT',   '2025-12-31 23:59:59',  2000, '%',   25,   150000, 60000, 'seller4'),
+#   ('PET30OFF',    '2025-08-31 23:59:59',  500,  'value',30000,100000,30000, 'seller5');
+#
+# INSERT INTO Voucher_category (category, voucher_id) VALUES
+#   ('platform',  '1'),
+#   ('platform',  '2'),
+#   ('platform',  '3'),
+#   ('electronics','4'),
+#   ('fashion',   '5'),
+#   ('home',      '6'),
+#   ('books',     '7'),
+#   ('pets',      '8');
+#
+# INSERT INTO Apply_voucher (voucher_id, order_id) VALUES
+#   -- Order 1 (johnDoe123)
+#   (1, 1),
+#   -- Order 2 (janeDoe)
+#   (5, 2),
+#   -- Order 3 (buyerX)
+#   (8, 3),
+#   -- Order 4 (user99)
+#   (3, 4),
+#   -- Order 5 (buyerX)
+#   (6, 5);
