@@ -1,4 +1,5 @@
 USE shopee;
+
 DROP PROCEDURE IF EXISTS Proc_Insert_person;
 DROP PROCEDURE IF EXISTS Proc_Insert_buyer;
 DROP PROCEDURE IF EXISTS Proc_Insert_seller;
@@ -280,8 +281,6 @@ BEGIN
                                     WHERE p.product_id = in_bid
                                       AND o.placed_date >= in_from
                                       AND o.state_type = 'finished') as sub);
-
-
 END //
 DELIMITER ;
 
