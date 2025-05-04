@@ -708,6 +708,36 @@ export async function getComments({product_id}) {
   }
 }
 
+export async function responseComment({comment_id, seller_usr, response}) {
+  try {
+    const [rows] = await pool.query(`
+      SELECT seller_usr, comment_id, response
+      FROM Comment c
+      WHERE c.comment_id = ?
+      `, [comment_id]);
+
+      if (rows.lenght == 0) throw new Error('Comment not exist');
+
+      const commentSeller = rows[0].seller_usr;
+      if (commentSeller != seller_usr)
+      {
+        throw new Error('Not allowed to response this comment');
+      }
+
+      const [result] = await pool.query(`
+        UPDATE Comment 
+        SET response = ? 
+        WHERE comment_id = ?
+      `, [response, comment_id]);
+      return rows;
+  } catch (err) {
+    throw err;
+  }
+}
+
+
+
+
 
 
 
