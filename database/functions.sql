@@ -26,11 +26,23 @@ BEGIN
 END //
 DELIMITER ;
 
+
+##########################################################
+#### Function to calculate total discount of an order ####
+##########################################################
 DELIMITER //
 CREATE FUNCTION Calculate_Total_Discount(orderID INT, orderTotal INT)
     RETURNS INT
     DETERMINISTIC
 BEGIN
+    IF orderID IS NULL OR orderID <= 0 THEN
+        RETURN 0;
+    END IF;
+
+    IF orderTotal IS NULL OR orderTotal < 0 THEN
+        RETURN 0;
+    END IF;
+
     DECLARE totalDiscount INT DEFAULT 0;
     DECLARE v_id INT;
     DECLARE d_type ENUM('%', 'value');
