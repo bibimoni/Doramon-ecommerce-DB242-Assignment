@@ -8,7 +8,6 @@ DROP TABLE IF EXISTS Ban_buyer;
 DROP TABLE IF EXISTS Report;
 DROP TABLE IF EXISTS Use_voucher;
 DROP TABLE IF EXISTS Voucher_category;
-DROP TABLE IF EXISTS Create_voucher;
 DROP TABLE IF EXISTS Cart;
 DROP TABLE IF EXISTS Transaction;
 DROP TABLE IF EXISTS `Order`;
@@ -68,8 +67,8 @@ CREATE TABLE Banking_account (
 );
 
 CREATE TABLE Social (
-	link				VARCHAR(20) UNIQUE NOT NULL, # cac tk dung cac account khac nhau
-    username            VARCHAR(200),
+	link				VARCHAR(100) UNIQUE NOT NULL, # cac tk dung cac account khac nhau
+    username            VARCHAR(20),
     PRIMARY KEY (username, link)
 );
 
@@ -117,7 +116,8 @@ CREATE TABLE Voucher (
     decrease_value      INT NOT NULL,
     min_buy_value       INT NOT NULL, # gia mua toi thieu
     max_decrease_value  INT NOT NULL, # giam toi da
-    seller_usr          VARCHAR(20) # null neu la shopee tao
+    seller_usr          VARCHAR(20), # null neu la shopee tao
+    admin_usr           VARCHAR(20)
 );
 
 CREATE TABLE Comment (
@@ -204,12 +204,6 @@ CREATE TABLE Cart (
     cart_id             INT AUTO_INCREMENT PRIMARY KEY,
     buyer_usr           VARCHAR(20),
     final_price         INT DEFAULT 0
-);
-
-CREATE TABLE Create_voucher (
-    admin_usr           VARCHAR(20),
-    voucher_id          INT,
-    PRIMARY KEY (admin_usr, voucher_id)
 );
 
 CREATE TABLE Voucher_category (

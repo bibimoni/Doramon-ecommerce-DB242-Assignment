@@ -55,6 +55,10 @@ ALTER TABLE Voucher
 ADD CONSTRAINT fk_voucher_sellusr
     FOREIGN KEY (seller_usr)
         REFERENCES Seller(username);
+ALTER TABLE Voucher
+ADD CONSTRAINT fk_voucher_admusr
+    FOREIGN KEY (admin_usr)
+        REFERENCES Admin(username);
 
 # Khoa ngoai...
 ALTER TABLE Comment
@@ -132,16 +136,6 @@ ALTER TABLE Cart
 ADD CONSTRAINT fk_cart_buyusr
     FOREIGN KEY (buyer_usr)
         REFERENCES Buyer(username) ON DELETE CASCADE;
-
-# ...
-ALTER TABLE Create_voucher
-ADD CONSTRAINT fk_cvoucher_admusr
-    FOREIGN KEY (admin_usr)
-        REFERENCES Admin(username) ON DELETE CASCADE ;
-ALTER TABLE Create_voucher
-ADD CONSTRAINT fk_cvoucher_vid
-    FOREIGN KEY (voucher_id)
-        REFERENCES Voucher(voucher_id) ON DELETE CASCADE ;
 
 #
 ALTER TABLE Voucher_category
