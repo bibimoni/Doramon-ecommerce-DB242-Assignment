@@ -89,7 +89,6 @@ CREATE TABLE Buyer (
 );
 
 CREATE TABLE Seller (
- 	shop_name			VARCHAR(20) NOT NULL,
 	business_id 	    INT NOT NULL UNIQUE,
     username            VARCHAR(20) PRIMARY KEY
 );
@@ -188,7 +187,7 @@ CREATE TABLE `Order` (
 CREATE TABLE Delivery (
     delivery_id         INT AUTO_INCREMENT PRIMARY KEY,
     name                VARCHAR(20) NOT NULL,
-    method              ENUM('normal, express') NOT NULL
+    method              ENUM('normal', 'express') NOT NULL
 );
 
 CREATE TABLE Transaction (
@@ -203,7 +202,8 @@ CREATE TABLE Transaction (
 
 CREATE TABLE Cart (
     cart_id             INT AUTO_INCREMENT PRIMARY KEY,
-    buyer_usr           VARCHAR(20)
+    buyer_usr           VARCHAR(20),
+    final_price         INT DEFAULT 0
 );
 
 CREATE TABLE Create_voucher (

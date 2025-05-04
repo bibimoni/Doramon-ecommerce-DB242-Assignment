@@ -17,7 +17,7 @@ DELIMITER //
 CREATE PROCEDURE Proc_Insert_person(
     IN in_username VARCHAR(20),
     IN in_hashed_password VARCHAR(64),
-    IN in_email VARCHAR(20),
+    IN in_email VARCHAR(100),
     IN in_birth_day DATE,
     IN in_phone_number VARCHAR(11),
     IN in_is_banned BOOL,
@@ -88,7 +88,7 @@ DELIMITER //
 CREATE PROCEDURE Proc_Insert_buyer(
     IN in_username VARCHAR(20),
     IN hashed_password VARCHAR(64),
-    IN email VARCHAR(20),
+    IN email VARCHAR(100),
     IN birthday DATE,
     IN phone_number VARCHAR(11),
     IN is_banned BOOL,
@@ -128,7 +128,7 @@ DELIMITER //
 CREATE PROCEDURE Proc_Insert_seller(
     IN in_username VARCHAR(20),
     IN hashed_password VARCHAR(64),
-    IN email VARCHAR(20),
+    IN email VARCHAR(100),
     IN birthday DATE,
     IN phone_number VARCHAR(11),
     IN is_banned BOOL,
@@ -188,7 +188,7 @@ DELIMITER //
 CREATE PROCEDURE Proc_Insert_admin(
     IN in_username VARCHAR(20),
     IN hashed_password VARCHAR(64),
-    IN email VARCHAR(20),
+    IN email VARCHAR(100),
     IN birthday DATE,
     IN phone_number VARCHAR(11),
     IN is_banned BOOL,
