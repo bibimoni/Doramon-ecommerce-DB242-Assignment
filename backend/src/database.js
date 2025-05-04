@@ -867,4 +867,17 @@ export async function cancelOrder({buyer_usr, order_id}) {
   }
 }
 
-//export async function addDelivery({})
+
+// Thêm một đơn vị vận chuyển 
+export async function addDelivery({name, method}) {
+  try {
+    const [rows] = await pool.query(`
+      INSERT INTO Delivery (name, method)
+      VALUE (?, ?)
+      `, [name, method]);
+
+      return checkExists(rows);
+  } catch (err) {
+    throw err;
+  }
+}

@@ -18,7 +18,8 @@ import {
   responseComment,
   removeComment,
   addOrder,
-  cancelOrder
+  cancelOrder,
+  addDelivery
 } from '../database.js';
 import { sha256 } from 'js-sha256';
 
@@ -472,5 +473,13 @@ app.post('/buyers/orders/cancel', async (req, res) => {
   }
 })
 
+app.post('/delivery/add', async (req, res) => {
+  const {name, method} = req.body;
+  try {
+    res.send({success: true, data: await addDelivery({name, method}) });
+  } catch (err) {
+    res.send({success: false, message: err.message});
+  }
+})
 export default app;
 
