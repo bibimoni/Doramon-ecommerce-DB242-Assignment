@@ -757,6 +757,15 @@ export async function getVouchers() {
   }
 }
 
-
+export async function getBestSaleFromDate({ business_id, date }) {
+  try {
+    const [[rows]] = await pool.query(`
+      CALL Proc_Best_sale_from_date(?, ?)
+      `, [date, business_id]);
+    return rows;
+  } catch (err) {
+    throw err;
+  }
+}
 
 

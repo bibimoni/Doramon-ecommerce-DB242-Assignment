@@ -264,24 +264,38 @@ CREATE PROCEDURE Proc_Best_sale_from_date(
     IN in_bid INT
 )
 BEGIN
-    SELECT p.product_id AS product_id,
-           p.name       AS product_name
-    FROM `Order` AS o
-             JOIN Order_has_variations AS ohv ON o.order_id = ohv.order_id
-             JOIN Product AS p ON p.product_id = ohv.product_id AND p.active = TRUE
-             JOIN Variation AS v ON v.variation_id = ohv.variation_id AND v.active = TRUE
-    WHERE p.product_id = in_bid
-      AND o.placed_date >= in_from
+    SELECT p.product_id,
+           p.name,
+           SUM(ov.amount) as sales
+    FROM Product p
+             JOIN Variation v
+                  ON v.product_id = p.product_id
+             JOIN Order_has_variations ov
+                  ON ov.product_id = v.product_id
+                      AND ov.variation_id = v.variation_id
+             JOIN `Order` o
+                  ON o.order_id = ov.order_id
+    WHERE p.business_id = in_bid
       AND o.state_type = 'finished'
-    HAVING SUM(ohv.amount) = (SELECT MAX(sales)
-                              FROM (SELECT SUM(ohv.amount) as sales
-                                    FROM `Order` AS o
-                                             JOIN Order_has_variations AS ohv ON o.order_id = ohv.order_id
-                                             JOIN Product AS p ON p.product_id = ohv.product_id
-                                             JOIN Variation AS v ON v.variation_id = ohv.variation_id
-                                    WHERE p.product_id = in_bid
-                                      AND o.placed_date >= in_from
-                                      AND o.state_type = 'finished') as sub);
+      AND o.placed_date >= in_from
+    GROUP BY p.product_id,
+             p.name
+    HAVING SUM(ov.amount) = (SELECT MAX(sales)
+                             FROM (SELECT SUM(ov.amount) as sales
+                                   FROM Product p
+                                            JOIN Variation v
+                                                 ON v.product_id = p.product_id
+                                            JOIN Order_has_variations ov
+                                                 ON ov.product_id = v.product_id
+                                                     AND ov.variation_id = v.variation_id
+                                            JOIN `Order` o
+                                                 ON o.order_id = ov.order_id
+                                   WHERE p.business_id = in_bid
+                                     AND o.state_type = 'finished'
+                                     AND o.placed_date >= in_from
+                                   GROUP BY p.product_id,
+                                            p.name) as sub)
+    ORDER BY p.product_id;
 END //
 DELIMITER ;
 
@@ -371,6 +385,7 @@ BEGIN
 END //
 DELIMITER ;
 
+SELECT * FROM Cart_has_variations;
 DELIMITER //
 CREATE PROCEDURE Proc_get_variations_from_cart(
     IN username VARCHAR(20)
@@ -392,6 +407,8 @@ BEGIN
         );
 END //
 DELIMITER ;
+
+CALL Proc_get_variations_from_cart('buyerX');
 
 DELIMITER //
 CREATE PROCEDURE Proc_get_all_products()

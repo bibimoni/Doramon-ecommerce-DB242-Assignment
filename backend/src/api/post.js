@@ -16,6 +16,7 @@ import {
   editUser,
   addVoucherBySeller,
   addVoucherByAdmin,
+  getBestSaleFromDate,
 } from '../database.js';
 import { sha256 } from 'js-sha256';
 
@@ -411,6 +412,18 @@ app.post('/users/admins/voucher', async (req, res) => {
 
   res.send({ success: true, data: results });
 
+});
+
+app.post('/shop/users/sellers/:business_id', async (req, res) => {
+  const business_id = req.params.business_id;
+  const {
+    date
+  } = req.body;
+  try {
+    res.send({ success: true, data: await getBestSaleFromDate({ business_id, date }) })
+  } catch (err) {
+    res.send({ success: true, message: err.message });
+  }
 });
 
 export default app;

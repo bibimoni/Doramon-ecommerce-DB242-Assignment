@@ -293,6 +293,8 @@ INSERT INTO Voucher_category (category, voucher_id) VALUES
 INSERT INTO Apply_voucher (voucher_id, order_id) VALUES
   -- Order 1 (johnDoe123)
   (1, 1),
+    (3, 1),
+
   -- Order 2 (janeDoe)
   (5, 2),
   -- Order 3 (buyerX)

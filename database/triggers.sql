@@ -1,6 +1,8 @@
 USE shopee;
 
-DROP TRIGGER IF EXISTS Update_Final_Price;
+DROP TRIGGER IF EXISTS Update_Final_Price_After_Add_Variation;
+DROP TRIGGER IF EXISTS Update_Final_Price_After_Remove_Variation;
+DROP TRIGGER IF EXISTS Update_Final_Price_After_Change_Quantity_Variation;
 DROP TRIGGER IF EXISTS Create_Transaction;
 
 ##########################################################

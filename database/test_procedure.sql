@@ -1,5 +1,4 @@
 DROP PROCEDURE IF EXISTS Proc_Best_sale_from_date;
-DROP PROCEDURE IF EXISTS Proc_get_variations_from_cart;
 DELIMITER  //
 CREATE PROCEDURE Proc_Best_sale_from_date(
     IN in_from DATETIME,
@@ -17,7 +16,7 @@ BEGIN
                       AND ov.variation_id = v.variation_id
              JOIN `Order` o
                   ON o.order_id = ov.order_id
-    WHERE p.business_id = 1
+    WHERE p.business_id = in_bid
       AND o.state_type = 'finished'
       AND o.placed_date >= in_from
     GROUP BY p.product_id,
@@ -32,7 +31,7 @@ BEGIN
                                                      AND ov.variation_id = v.variation_id
                                             JOIN `Order` o
                                                  ON o.order_id = ov.order_id
-                                   WHERE p.business_id = 1
+                                   WHERE p.business_id = in_bid
                                      AND o.state_type = 'finished'
                                      AND o.placed_date >= in_from
                                    GROUP BY p.product_id,
