@@ -1,0 +1,110 @@
+/* Seller.css */
+
+.seller-dashboard{
+    width: 100%;
+}
+/* Navbar */
+.seller-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #1e90ff;
+    color: white;
+    font-size: 18px;
+  }
+  
+  .logo {
+    font-weight: bold;
+  }
+  
+  .navbar-link {
+    margin-right: 15px;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .navbar-avatar {
+    cursor: pointer;
+  }
+  
+  /* Main Content */
+  .main-content {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 200px;
+    background-color: #ffffff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .sidebar-menu {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar-menu li {
+    margin-bottom: 15px;
+    cursor: pointer;
+    color: #333;
+    font-size: 16px;
+  }
+  
+  .sidebar-menu li:hover {
+    color: #1e90ff;
+  }
+  
+  /* Home Content */
+  .home-content {
+    flex-grow: 1;
+    padding: 20px;
+  }
+  
+  .analytics-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+  }
+  
+  .analytics-card p {
+    margin: 10px 0;
+  }
+  .analytics-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* .sales-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .sale-item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    width: 30%;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sale-item h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+  }
+  
+  .sale-item p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 1rem;
+  } */

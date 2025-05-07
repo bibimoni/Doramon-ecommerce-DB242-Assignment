@@ -1,0 +1,127 @@
+.cart-page {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.cart-items-container {
+  display: flex;
+  flex-wrap: wrap; /* Cho phép các phần tử con dàn thành nhiều dòng nếu cần */
+  gap: 20px;
+  justify-content: space-evenly; /* Đảm bảo các sản phẩm phân bố đều và đẹp hơn */
+}
+
+.cart-item {
+  display: flex;
+  flex-direction: column; /* Dàn dọc nội dung trong một sản phẩm */
+  gap: 15px;
+  width: 48%; /* Điều chỉnh width để sản phẩm chiếm gần một nửa chiều rộng của container */
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Tăng độ đổ bóng để tạo cảm giác chiều sâu */
+  box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước */
+  transition: transform 0.2s ease-in-out; /* Thêm hiệu ứng hover cho sản phẩm */
+}
+
+.cart-item:hover {
+  transform: translateY(-5px); /* Tạo hiệu ứng khi hover vào sản phẩm */
+}
+
+.cart-item-image-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-item-image {
+  max-width: 200px; /* Tăng kích thước hình ảnh để làm sản phẩm nổi bật hơn */
+  max-height: 200px;
+  object-fit: cover;
+}
+
+.cart-item-details {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Tăng khoảng cách giữa các phần tử trong sản phẩm */
+}
+
+.cart-item-variations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cart-item-variations p {
+  margin: 0;
+  color: #555;
+  font-size: 0.95rem; /* Giảm kích thước font để nhìn thanh thoát hơn */
+}
+
+.cart-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cart-item-amount {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Tăng khoảng cách giữa các nút */
+}
+
+.cart-item-amount button {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 8px 15px; /* Tăng kích thước nút để dễ sử dụng hơn */
+  font-size: 1.1rem; /* Tăng kích thước font */
+  cursor: pointer;
+  border-radius: 5px; /* Thêm bo tròn để nút mềm mại hơn */
+}
+
+.cart-item-amount button:hover {
+  background-color: #ddd;
+}
+
+.remove-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 1.1rem; /* Tăng kích thước nút */
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.remove-button:hover {
+  background-color: #d32f2f;
+}
+
+.cart-total {
+  margin-top: 30px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  text-align: right;
+}
+
+.checkout-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.checkout-button:hover {
+  background-color: #45a049;
+}

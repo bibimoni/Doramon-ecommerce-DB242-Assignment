@@ -1,0 +1,29 @@
+.dropDown {
+    position: absolute;
+    top: 4.5rem;
+    right: 3.5rem;
+    width: 180px;
+    padding: 15px;
+    border-radius: 8px; /* Giảm góc bo tròn để nhìn mềm mại hơn */
+    background-color: #ffffff; /* Màu nền trắng sáng */
+    border: 1px solid #dcdcdc; /* Đổi màu border cho mềm mại */
+    color: #333333; /* Màu chữ tối để dễ đọc */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ */
+    transition: all 0.3s ease-in-out; /* Thêm hiệu ứng chuyển động */
+}
+
+/* Hiệu ứng hover cho các mục */
+.dropDown li {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    color: black;
+}
+
+/* Nếu dropdown có menu dạng danh sách, có thể thêm style cho ul */
+.dropDown ul {
+    list-style-type: none; /* Loại bỏ dấu gạch đầu dòng */
+    padding: 0;
+    margin: 0;
+}

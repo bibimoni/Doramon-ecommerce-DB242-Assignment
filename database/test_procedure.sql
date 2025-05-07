@@ -1,46 +1,3 @@
-DROP PROCEDURE IF EXISTS Proc_Best_sale_from_date;
-DELIMITER  //
-CREATE PROCEDURE Proc_Best_sale_from_date(
-    IN in_from DATETIME,
-    IN in_bid INT
-)
-BEGIN
-    SELECT p.product_id,
-           p.name,
-           SUM(ov.amount) as sales
-    FROM Product p
-             JOIN Variation v
-                  ON v.product_id = p.product_id
-             JOIN Order_has_variations ov
-                  ON ov.product_id = v.product_id
-                      AND ov.variation_id = v.variation_id
-             JOIN `Order` o
-                  ON o.order_id = ov.order_id
-    WHERE p.business_id = in_bid
-      AND o.state_type = 'finished'
-      AND o.placed_date >= in_from
-    GROUP BY p.product_id,
-             p.name
-    HAVING SUM(ov.amount) = (SELECT MAX(sales)
-                             FROM (SELECT SUM(ov.amount) as sales
-                                   FROM Product p
-                                            JOIN Variation v
-                                                 ON v.product_id = p.product_id
-                                            JOIN Order_has_variations ov
-                                                 ON ov.product_id = v.product_id
-                                                     AND ov.variation_id = v.variation_id
-                                            JOIN `Order` o
-                                                 ON o.order_id = ov.order_id
-                                   WHERE p.business_id = in_bid
-                                     AND o.state_type = 'finished'
-                                     AND o.placed_date >= in_from
-                                   GROUP BY p.product_id,
-                                            p.name) as sub)
-    ORDER BY p.product_id;
-END //
-DELIMITER ;
-
-
 CALL Proc_Best_sale_from_date('2025-05-01 09:00:00', 1);
 CALL Proc_Best_sale_from_date('2025-04-20 10:15:00', 1);
 
@@ -217,4 +174,3 @@ VALUES (@prod3,@var6, @ord1, 1),
        (@prod3,@var7,@ord1, 2),
        (@prod3,@var6, @ord3, 1),
        (@prod3,@var7,@ord3, 1);
-

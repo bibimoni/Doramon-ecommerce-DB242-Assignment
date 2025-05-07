@@ -1,0 +1,15 @@
+/* Style cho app */
+.app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height */
+  }
+  
+  /* Style cho main-content */
+  .main-content {
+    margin-top: 60px; /* Đẩy nội dung xuống dưới navbar */
+    padding: 20px;
+    flex-grow: 1; /* Đảm bảo phần này chiếm hết không gian còn lại */
+    background-color: #f4f4f4;
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+  }

@@ -15,7 +15,7 @@ FROM Buyer b
 WHERE username = 'buyerX';
 
 -- lay final price
-SELECT Cart.final_price FROM Cart JOIN Buyer b ON Cart.buyer_usr = b.username WHERE b.username = 'buyerX';
+SELECT Cart.final_price FROM Cart JOIN Buyer b ON Cart.buyer_usr = b.username WHERE b.username = 'bibimoni';
 
 -- add
 CALL Proc_update_cart_variation('buyerX', 10, 100);

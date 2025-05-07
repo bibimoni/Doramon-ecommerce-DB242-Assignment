@@ -1,0 +1,158 @@
+/* Toàn bộ nền */
+.auth-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1; /* Đảm bảo nền nằm phía sau */
+  overflow: hidden;
+}
+
+.auth-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: url('/background.jpg') no-repeat center center; /* Hình nền */
+  background-size: cover; /* Bao phủ toàn bộ */
+  filter: blur(8px); /* Làm mờ hình nền */
+  z-index: 1; /* Đặt nền dưới tất cả các phần tử */
+}
+
+/* Wrapper cho nội dung */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  z-index: 1; /* Đảm bảo wrapper ở trên nền */
+}
+
+/* Container form */
+.auth-container {
+  background: rgba(255, 255, 255, 0.9); /* Nền trắng với độ trong suốt */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng */
+  width: 100%;
+  max-width: 400px; /* Chiều rộng tối đa của form */
+  text-align: center; /* Căn giữa nội dung */
+  z-index: 2; /* Đảm bảo form luôn ở trên nền */
+  position: relative; /* Đảm bảo form không bị ảnh hưởng bởi lớp phía dưới */
+}
+
+
+/* Tiêu đề */
+.auth-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Nhóm input */
+.form-group {
+  margin-bottom: 20px; /* Khoảng cách giữa các input */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%; /* Chiều rộng đầy đủ */
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px; /* Góc bo cho input */
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng hover/focus */
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #007bff; /* Đổi màu border khi focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Nút bấm */
+.auth-button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+  background-color: #0056b3; /* Màu sắc khi hover */
+}
+
+/* Chú thích và liên kết */
+.auth-text {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.auth-text a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.auth-text a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .auth-container {
+    padding: 20px;
+  }
+}
+
+
+.userType-sellect {
+  display: flex;
+  gap: 20px; /* Khoảng cách giữa các nút */
+  align-items: center;
+  margin-top: 20px;
+}
+
+.userType-sellect label {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Khoảng cách giữa radio và text */
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+}
+
+.userType-sellect input[type="radio"] {
+  accent-color: #007bff; /* Màu cho nút radio */
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  margin: 0; /* Loại bỏ khoảng cách mặc định */
+}
+
+.userType-sellect label:hover {
+  color: #0056b3; /* Đổi màu chữ khi hover */
+}
+
+.userType-sellect input[type="radio"]:checked + label {
+  color: #007bff; /* Màu chữ khi được chọn */
+  font-weight: bold;
+}

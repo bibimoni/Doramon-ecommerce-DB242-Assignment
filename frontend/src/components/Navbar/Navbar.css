@@ -1,0 +1,110 @@
+/* Tổng thể */
+.navbar {
+    width: 100%; /* Đảm bảo chiều rộng toàn màn hình */
+    position: fixed; /* Giữ cố định trên đầu trang */
+    top: 0; /* Căn trên */
+    left: 0; /* Căn trái */
+    background-color: #0077b6; /* Màu nền */
+    color: white; /* Màu chữ */
+    padding: 10px 20px; /* Khoảng cách bên trong (kéo vào bên trong từ 2 bên) */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng */
+    display: flex; /* Dùng Flexbox để bố trí các phần tử */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: space-between; /* Giãn cách đều các phần tử */
+    z-index: 1000; /* Đặt trên các thành phần khác */
+  }
+  
+  /* Logo */
+  .navbar-logo {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  /* Thanh tìm kiếm */
+  .navbar-search {
+    flex-grow: 1; /* Tự động giãn nở */
+    margin: 0 20px; /* Cách đều các phần tử bên cạnh */
+    max-width: calc(100% - 200px); /* Giới hạn chiều rộng */
+}
+  
+.navbar-search input {
+    width: 90%; /* Đảm bảo chiều rộng đầy đủ */
+    padding: 12px; /* Tăng padding để làm cao thanh tìm kiếm */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    height: 22px; /* Hoặc bạn có thể tăng giá trị này tùy ý */
+}
+
+  
+  /* Khu vực bên phải */
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+    margin-right: 30px;
+  }
+  
+  /* Giỏ hàng */
+  .navbar-cart {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background-color: white; /* Màu nền trắng */
+    color: black; /* Màu chữ đen */
+    padding: 8px 16px;
+    border-radius: 50px; /* Bo góc để tạo dạng hình tròn */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: 1px solid #ccc; /* Thêm đường viền nhẹ */
+  }
+  
+  .navbar-cart span {
+    margin-right: 5px;
+    font-size: 18px;
+  }
+  
+  .navbar-cart:hover {
+    background-color: #f8f9fa; /* Màu nền sáng khi hover */
+    transform: scale(1.1); /* Phóng to khi hover */
+  }
+  
+  .navbar-cart:active {
+    transform: scale(0.98); /* Nhỏ lại khi nhấn */
+  }
+  
+  
+  /* Hỗ trợ */
+  .navbar-support {
+    cursor: pointer;
+    background-color: white; /* Màu nền trắng */
+    color: black; /* Màu chữ đen */
+    padding: 10px 20px;
+    border-radius: 5px; /* Bo góc */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng chuyển màu nền và co giãn */
+  }
+  
+  .navbar-support:hover {
+    background-color: #f8f9fa; /* Màu nền sáng khi hover */
+    transform: scale(1.1); /* Phóng to khi hover */
+  }
+  
+  .avt {
+    width: 50px; /* Kích thước avatar */
+    height: 50px;
+    background-color: #f0f0f0; /* Màu nền mặc định */
+    border-radius: 50%; /* Làm tròn hình ảnh */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ccc; /* Đường viền */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng */
+  }
+  
+  .avt-icon {
+    font-size: 24px; /* Kích thước biểu tượng */
+    color: #888; /* Màu của biểu tượng */
+  }
+  
+  

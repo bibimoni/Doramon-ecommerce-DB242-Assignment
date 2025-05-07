@@ -258,6 +258,7 @@ DELIMITER ;
 
 # tim san pham co doanh so cao nhat
 # cua 1 shop tu 1 khoang thoi gian nao do
+DROP PROCEDURE IF EXISTS Proc_Best_sale_from_date;
 DELIMITER  //
 CREATE PROCEDURE Proc_Best_sale_from_date(
     IN in_from DATETIME,
@@ -294,7 +295,8 @@ BEGIN
                                      AND o.state_type = 'finished'
                                      AND o.placed_date >= in_from
                                    GROUP BY p.product_id,
-                                            p.name) as sub)
+                                            p.name
+                                   ) as sub)
     ORDER BY p.product_id;
 END //
 DELIMITER ;

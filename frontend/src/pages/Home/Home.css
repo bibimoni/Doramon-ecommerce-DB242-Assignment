@@ -1,0 +1,55 @@
+.home {
+    padding-left: 30px; /* Giảm khoảng cách padding để phù hợp với màn hình nhỏ */
+
+}
+
+.header {
+    align-items: center;
+    height: 18vw;
+    margin: 20px auto;
+    background: url('/shutterstock_1445581070.jpeg') no-repeat center center; 
+    background-size: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-contents {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    display: flex;
+    padding: 20px;
+    left: 5%;
+    color: #ffffff;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.6);
+    animation:fadeIn 3s
+}
+
+.header-contents h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.header-contents p {
+    font-size: 1.2rem; 
+    line-height: 1.6;
+    margin: 0;
+    
+}
+
+.header-contents button {
+    padding: 10px 20px;
+    font-size: max(1vw,13px);
+    font-weight: 500;
+    color: white;
+    background-color: #0077b6;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.header-contents button:hover {
+    background-color: #0056b3; /* Đổi màu khi hover */
+}

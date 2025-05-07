@@ -1,4 +1,17 @@
 CALL Proc_Insert_buyer(
+    'bibimoni',
+    'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f',  -- password123 (SHA-256)
+    'bibimoni@example.com',
+    '2005-05-20',
+    '0122341231',
+    FALSE,
+    'https://example.com/avatar/john.png',
+    'm',
+     0
+);
+
+
+CALL Proc_Insert_buyer(
     'johnDoe123',
     'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f',  -- password123 (SHA-256)
     'john@example.com',
@@ -303,3 +316,73 @@ INSERT INTO Apply_voucher (voucher_id, order_id) VALUES
   (3, 4),
   -- Order 5 (buyerX)
   (6, 5);
+
+
+UPDATE Product SET thumbnail = 'iphone_13.jpg' WHERE product_id = 1;
+UPDATE Product SET thumbnail = 'iphone_se.jpg' WHERE product_id = 2;
+UPDATE Product SET thumbnail = 'oneplus_9.jpg' WHERE product_id = 3;
+UPDATE Product SET thumbnail = 'p50_pro.jpg' WHERE product_id = 4;
+UPDATE Product SET thumbnail = 'pixel_7.jpg' WHERE product_id = 5;
+UPDATE Product SET thumbnail = 'redmi_note_12.jpg' WHERE product_id = 6;
+UPDATE Product SET thumbnail = 'xperia_5_iv.jpg' WHERE product_id = 7;
+UPDATE Product SET thumbnail = 'laptop.jpg' WHERE product_id = 8;
+
+UPDATE Variation
+SET state      = 'Available',
+    attachment  = 'background.jpg'
+WHERE variation_id = 1;
+
+UPDATE Variation
+SET state      = 'Available',
+    attachment  = 'database.png'
+WHERE variation_id = 2;
+
+UPDATE Variation
+SET state      = 'Available',
+    attachment  = 'find_x5_pro.jpg'
+WHERE variation_id = 3;
+
+UPDATE Variation
+SET state      = 'Available',
+    attachment  = 'galaxy_s21.jpg'
+WHERE variation_id = 4;
+
+UPDATE Variation
+SET state      = 'Available',
+    attachment  = 'iphone_13.jpg'
+WHERE variation_id = 5;
+
+UPDATE Variation
+SET state      = 'Available',
+    attachment  = 'iphone_se.jpg'
+WHERE variation_id = 6;
+
+UPDATE Variation
+SET state      = 'Available',
+    attachment  = 'laptop.jpg'
+WHERE variation_id = 7;
+
+UPDATE Variation
+SET state      = 'Out of stock',
+    attachment  = 'oneplus_9.jpg'
+WHERE variation_id = 8;
+
+UPDATE Variation
+SET state      = 'Available',
+    attachment  = 'p50_pro.jpg'
+WHERE variation_id = 9;
+
+UPDATE Variation
+SET state      = 'Available',
+    attachment  = 'pixel_7.jpg'
+WHERE variation_id = 10;
+
+UPDATE Variation
+SET state      = 'Available',
+    attachment  = 'redmi_note_12.jpg'
+WHERE variation_id = 11;
+
+UPDATE Variation
+SET state      = 'Available',
+    attachment  = 'shutterstock_1445581070.jpeg'
+WHERE variation_id = 12;

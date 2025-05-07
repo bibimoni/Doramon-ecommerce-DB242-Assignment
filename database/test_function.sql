@@ -36,3 +36,11 @@ WHERE o.order_id = 1
 GROUP BY o.order_id, v.decrease_type, v.decrease_value, v.max_decrease_value, v.min_buy_value;
 
 CALL Test_function(1);
+SELECT SUM(v.price * ohv.amount)
+FROM `Order` o
+JOIN Order_has_variations ohv ON ohv.order_id = o.order_id
+JOIN Variation v ON v.variation_id = ohv.variation_id
+WHERE o.order_id = 1
+LIMIT 1;
+
+DELETE FROM Apply_voucher WHERE order_id = 2
